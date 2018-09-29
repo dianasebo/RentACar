@@ -12,7 +12,7 @@ namespace RentACar.Server.DataAccess {
 
         public IEnumerable<User> GetAllUsers () {
             try {
-                return db.users.ToList ();
+                return db.Users.ToList ();
             } catch {
                 throw;
             }
@@ -20,7 +20,7 @@ namespace RentACar.Server.DataAccess {
 
         public void AddUser (User user) {
             try {
-                db.users.Add (user);
+                db.Users.Add (user);
                 db.SaveChanges ();
             } catch {
                 throw;
@@ -38,7 +38,7 @@ namespace RentACar.Server.DataAccess {
 
         public User GetUserById (int id) {
             try {
-                User user = db.users.Find (id);
+                User user = db.Users.Find (id);
                 return user;
             } catch {
                 throw;
@@ -47,8 +47,8 @@ namespace RentACar.Server.DataAccess {
 
         public void DeleteById (int id) {
             try {
-                User user = db.users.Find (id);
-                db.users.Remove (user);
+                User user = db.Users.Find (id);
+                db.Users.Remove (user);
                 db.SaveChanges ();
             } catch {
                 throw;

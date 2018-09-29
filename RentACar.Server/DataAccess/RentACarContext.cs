@@ -4,7 +4,7 @@ using RentACar.Shared.Models;
 
 namespace RentACar.Server.DataAccess {
     public class RentACarContext : DbContext {
-        public virtual DbSet<User> users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured)

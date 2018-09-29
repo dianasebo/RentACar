@@ -6,3 +6,7 @@
 /.vscode
 /*/obj
 /*/bin
+/RentACar.Server/RentACar.Server.csproj.user
+/RentACar.Server/Properties/launchSettings.json
+/RentACar.Client/RentACar.Client.csproj.user
+/RentACar.Client/Properties/launchSettings.json

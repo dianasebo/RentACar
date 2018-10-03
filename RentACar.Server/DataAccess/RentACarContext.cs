@@ -5,6 +5,8 @@ using RentACar.Shared.Models;
 namespace RentACar.Server.DataAccess {
     public class RentACarContext : DbContext {
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<CarBrand> CarBrands { get; set; }
+        public virtual DbSet<CarModel> CarModels { get; set; }
 
         protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured)

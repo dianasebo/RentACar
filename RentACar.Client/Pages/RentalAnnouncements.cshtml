@@ -1,0 +1,56 @@
+﻿@page "/announcements"
+@using RentACar.Shared.Models
+@inject HttpClient Http
+
+@if (CarBrands == null)
+{
+    <p>Loading brands...</p>
+}
+else
+{ 
+<div class="container">
+    <h1> Rental Announcements </h1>
+
+    <div id="filters">
+        <select class="form-control" onchange="@CarBrandClicked">
+            <option value="">-- Select Brand --</option>
+            @foreach (var carBrand in CarBrands)
+            {
+                <option value="@carBrand.Id">@carBrand.Name</option>
+            }
+        </select>
+
+        <select class="form-control">
+            <option value="">-- Select Model --</option>
+            @foreach (var carModel in CarModels)
+            {
+                <option value="@carModel.Id">@carModel.Name</option>
+            }
+        </select>
+    </div>
+
+</div>
+}
+
+
+
+@functions
+{
+    List<CarBrand> CarBrands { get; set; } = new List<CarBrand>();
+    List<CarModel> CarModels { get; set; } = new List<CarModel>();
+
+    protected async override Task OnInitAsync ()
+    {
+        CarBrands = await Http.GetJsonAsync<List<CarBrand>>("api/Car/GetCarBrands");
+    }
+
+    protected async void CarBrandClicked(UIChangeEventArgs carBrandEvent)
+    {
+        CarModels.Clear();
+
+        int countryId = int.Parse(carBrandEvent.Value.ToString());
+
+        CarModels = await Http.GetJsonAsync<List<CarModel>>("api/Car/GetCarModels/" + countryId);
+        this.StateHasChanged();
+    }
+}

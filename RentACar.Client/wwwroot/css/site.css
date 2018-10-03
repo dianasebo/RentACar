@@ -19,12 +19,12 @@
     width: 100%;
 }
 
-.menu_bar {
+.menu-bar {
     width: 80%;
     float: left;
 }
 
-.clear_float {
+.clear-float {
     clear: both;
 }
 
@@ -33,18 +33,18 @@
     text-align: right;
 }
 
-.menu_item {
+.menu-item {
     display: inline-block;
     margin: 5px;
     color: black;
 }
 
-.menu_item a {
+.menu-item a {
     color: black;
     font-weight: bold;
 }
 
-    .menu_item a:hover {
+    .menu-item a:hover {
         color: darkblue;
         text-decoration: none;
     }

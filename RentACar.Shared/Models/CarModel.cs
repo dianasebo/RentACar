@@ -9,6 +9,8 @@ namespace RentACar.Shared.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int CarBrandId { get; set; }
+        public int Year { get; set; }
+        public EngineType EngineType { get; set; }
 
         public CarBrand CarBrand { get; set; }
     }

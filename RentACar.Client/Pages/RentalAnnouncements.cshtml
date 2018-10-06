@@ -8,10 +8,9 @@
 }
 else
 { 
-<div class="container">
     <h1> Rental Announcements </h1>
 
-    <div id="filters">
+    <div class="filters">
         <select class="form-control" onchange="@CarBrandClicked">
             <option value="">-- Select Brand --</option>
             @foreach (var carBrand in CarBrands)
@@ -20,16 +19,43 @@ else
             }
         </select>
 
-        <select class="form-control">
+        <select class="form-control" onchange="@CarModelClicked">
             <option value="">-- Select Model --</option>
             @foreach (var carModel in CarModels)
             {
-                <option value="@carModel.Id">@carModel.Name</option>
+                <option value="@carModel.Name">@carModel.Name</option>
             }
+        </select>
+
+        <select class="form-control" onchange="@YearsClicked">
+            <option value="">-- Select Year --</option>
+            @foreach (var year in Years)
+            {
+                <option value="@year">@year</option>
+            }
+        </select>
+
+        <select class="form-control">
+            <option value="">-- Select Engine Type ---</option>
+            @foreach (var engineType in EngineTypes)
+            {
+                <option value="@engineType">@engineType</option>
+            }
+        </select>
+
+        <select class="form-control">
+            <option value="">-- Select City --</option>
+        </select>
+
+        <select class="form-control">
+            <option value="">Start Date</option>
+        </select>
+
+        <select class="form-control">
+            <option value="">End Date</option>
         </select>
     </div>
 
-</div>
 }
 
 
@@ -38,19 +64,66 @@ else
 {
     List<CarBrand> CarBrands { get; set; } = new List<CarBrand>();
     List<CarModel> CarModels { get; set; } = new List<CarModel>();
+    List<EngineType> EngineTypes { get; set; } = new List<EngineType>();
+    List<int> Years { get; set; } = new List<int>();
+    int? SelectedYear { get; set; } = null;
+    int? SelectedEngineType { get; set; } = null;
 
     protected async override Task OnInitAsync ()
     {
-        CarBrands = await Http.GetJsonAsync<List<CarBrand>>("api/Car/GetCarBrands");
+        CarBrands = await Http.GetJsonAsync<List<CarBrand>>("api/Cars/Brands");
+        Years = await Http.GetJsonAsync<List<int>>("api/Cars/Years");
+        EngineTypes = await Http.GetJsonAsync<List<EngineType>>("api/Cars/Engine");
+
     }
 
     protected async void CarBrandClicked(UIChangeEventArgs carBrandEvent)
     {
-        CarModels.Clear();
+        int carBrandId = int.Parse(carBrandEvent.Value.ToString());
 
-        int countryId = int.Parse(carBrandEvent.Value.ToString());
-
-        CarModels = await Http.GetJsonAsync<List<CarModel>>("api/Car/GetCarModels/" + countryId);
+        CarModels = await Http.GetJsonAsync<List<CarModel>>("api/Cars/Models/" + carBrandId);
+        if (SelectedYear != null)
+            CarModels.RemoveAll(m => m.Year != SelectedYear);
         this.StateHasChanged();
     }
+
+    protected async void CarModelClicked(UIChangeEventArgs carModelEvent)
+    {
+        string carModelName = carModelEvent.Value.ToString();
+        Years = await Http.GetJsonAsync<List<int>>("api/Cars/Years/" + carModelName);
+        this.StateHasChanged();
+    }
+
+    protected async void YearsClicked(UIChangeEventArgs yearEvent)
+    {
+        int year;
+
+        if (int.TryParse(yearEvent.Value.ToString(), out year))
+        {
+            SelectedYear = year;
+            CarBrands = await Http.GetJsonAsync<List<CarBrand>>("api/Cars/Brands/" + SelectedYear);
+        }
+        else
+        {
+            SelectedYear = null;
+            await OnInitAsync();
+        }
+        this.StateHasChanged();
+    }
+
+    //protected async void EngineTypeClicked(UIChangeEventArgs engineTypeEvent)
+    //{
+    //    int engineType;
+    //    if(int.TryParse(engineTypeEvent.Value.ToString(), out engineType))
+    //    {
+    //        SelectedEngineType = engineType;
+    //        CarBrands = await Http.GetJsonAsync<List<CarBrand>>("api/Car/CarBrands/" + SelectedEngineType);
+    //    }
+    //    else
+    //    {
+    //        SelectedEngineType = null;
+    //        await OnInitAsync();
+    //    }
+    //    this.StateHasChanged();
+    //}
 }

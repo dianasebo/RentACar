@@ -8,7 +8,7 @@ namespace RentACar.Server.DataAccess
 {
     public class CarDAO : BaseDAO 
     {
-        RentACarContext db = new RentACarContext();
+        
 
         public void AddCar(Car car) 
         {
@@ -26,7 +26,8 @@ namespace RentACar.Server.DataAccess
                                                  .First());
         }
 
-        public int GetRandomYear() {
+        public int GetRandomYear() 
+        {
             return TryDatabaseQuery(() => db.Cars.Select(c => c.Year)
                                                  .AsEnumerable()
                                                  .OrderBy(b => Guid.NewGuid())

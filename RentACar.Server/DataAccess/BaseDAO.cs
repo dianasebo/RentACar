@@ -4,6 +4,8 @@ namespace RentACar.Server.DataAccess
 {
     public class BaseDAO
     {
+        protected RentACarContext db = new RentACarContext();
+
         protected void TryDatabaseQuery (Action query) 
         {
             try 

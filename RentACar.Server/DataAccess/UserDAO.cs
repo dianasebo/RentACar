@@ -12,13 +12,13 @@ namespace RentACar.Server.DataAccess
     {
         public IEnumerable<User> GetAllUsers () 
         {
-            return TryDatabaseQuery(() => db.Users.ToList());
+            return TryDatabaseQuery(() => db.UserInfo.ToList());
         }
 
         public void AddUser (User user) 
         {
             TryDatabaseQuery(() => {
-                db.Users.Add (user);
+                db.UserInfo.Add (user);
                 db.SaveChanges ();
             });
         }
@@ -31,16 +31,13 @@ namespace RentACar.Server.DataAccess
             });
         }
 
-        public User GetUserById (int id) 
-        {
-            return TryDatabaseQuery(() => db.Users.Find (id));
-        }
+        public User GetUserById(int id) => TryDatabaseQuery(() => db.UserInfo.Find (id));
 
         public void DeleteById (int id) 
         {
             TryDatabaseQuery(() => {
-                User user = db.Users.Find (id);
-                db.Users.Remove (user);
+                User user = db.UserInfo.Find (id);
+                db.UserInfo.Remove (user);
                 db.SaveChanges ();
             });
         }

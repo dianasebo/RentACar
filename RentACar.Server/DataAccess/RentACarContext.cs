@@ -1,11 +1,14 @@
 using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentACar.Shared.Models;
 
-namespace RentACar.Server.DataAccess {
-    public class RentACarContext : DbContext {
-        public virtual DbSet<User> Users { get; set; }
+namespace RentACar.Server.DataAccess 
+{
+    public class RentACarContext : IdentityDbContext 
+    {
         public virtual DbSet<Car> Cars { get; set; }
+        public virtual DbSet<User> UserInfo { get; set; }
 
         protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {

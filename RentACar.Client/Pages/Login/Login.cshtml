@@ -1,0 +1,42 @@
+﻿@page "/login"
+@using RentACar.Shared.Models
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<h1>Login</h1>
+
+<div class="container">
+    <div class="form-group">
+        <label for="email" class="control-label">Email: </label>
+        <input required for="email" bind="@loginRequest.Email" type="email" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="control-label">Password: </label>
+        <input required for="password" bind="@loginRequest.Password" type="password" class="form-control"/>
+    </div>
+    
+    @if (!CorrectInfo)
+    {
+        <div class="error"><em>Email or password wrong</em></div>
+    }
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-default" onclick="@AttemptLogin">Login</button>
+    </div>
+</div>
+
+@functions
+{
+    LoginRequest loginRequest { get; set; } = new LoginRequest ();
+    bool CorrectInfo { get; set; } = true;
+    protected async void AttemptLogin ()
+    {
+        var response = await Http.PostJsonAsync<LoginResponse> ("api/Login", loginRequest);
+
+        if (response.IsSuccessful)
+            UriHelper.NavigateTo ("/success");
+        else
+            CorrectInfo = false;
+    } 
+}

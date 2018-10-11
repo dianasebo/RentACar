@@ -6,55 +6,56 @@
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<h1>Register</h1>
+<div class="container register-background">
+    <h1>Register</h1>
+    <div class="centered-content">
+        <div class="form-group">
+            <label for="lastname" class="control-label">Last name: </label>
+            <input required for="lastname" bind="@InputLastname" type="text" class="form-control"/>
+        </div>
 
-<div class="container">
-    <div class="form-group">
-        <label for="lastname" class="control-label">Last name: </label>
-        <input required for="lastname" bind="@InputLastname" type="text" class="form-control"/>
-    </div>
+        <div class="form-group">
+            <label for="firstname" class="control-label">First name: </label>
+            <input required for="firstname" bind="@InputFirstname" type="text" class="form-control"/>
+        </div>
 
-    <div class="form-group">
-        <label for="firstname" class="control-label">First name: </label>
-        <input required for="firstname" bind="@InputFirstname" type="text" class="form-control"/>
-    </div>
+        <div class="form-group">
+            <label for="email" class="control-label">Email: </label>
+            <input required for="email" bind="@InputEmail" type="email" class="form-control"/>
+        </div>
 
-    <div class="form-group">
-        <label for="email" class="control-label">Email: </label>
-        <input required for="email" bind="@InputEmail" type="email" class="form-control"/>
-    </div>
+        <div class="form-group">
+            <label for="password" class="control-label">Password: </label>
+            <input required for="password" bind="@InputPassword" type="password" class="form-control"/>
+        </div>
 
-    <div class="form-group">
-        <label for="password" class="control-label">Password: </label>
-        <input required for="password" bind="@InputPassword" type="password" class="form-control"/>
-    </div>
+        <div class="form-group">
+            <label for="confirmpassword" class="control-label">Confirm Password: </label>
+            <input required for="confirmpassword" bind="@InputConfirmPassword" type="password" class="form-control"/>
+        </div>
 
-    <div class="form-group">
-        <label for="confirmpassword" class="control-label">Confirm Password: </label>
-        <input required for="confirmpassword" bind="@InputConfirmPassword" type="password" class="form-control"/>
-    </div>
-
-    @foreach (var error in Errors)
-    {
-        @if (error.Key.Contains("Password"))
+        @foreach (var error in Errors)
         {
-            <div><em style="color: red">@error.Value</em></div>
+            @if (error.Key.Contains("Password"))
+            {
+                <div><em style="color: red">@error.Value</em></div>
+            }
         }
-    }
 
-    <div class="form-group">
-        <label for="city" class="control-label">City: </label>
-        <input for="city" bind="@InputCity" type="text" class="form-control"/>
-    </div>
+        <div class="form-group">
+            <label for="city" class="control-label">City: </label>
+            <input for="city" bind="@InputCity" type="text" class="form-control"/>
+        </div>
 
-    <div class="form-group">
-        <label for="address" class="control-label">Address: </label>
-        <input for="address" bind="@InputAddress" type="text" class="form-control"/>
-    </div>
+        <div class="form-group">
+            <label for="address" class="control-label">Address: </label>
+            <input for="address" bind="@InputAddress" type="text" class="form-control"/>
+        </div>
 
-    <div class="form-group">
-            <button type="submit" class="btn btn-default" onclick="@RegisterUser">Register</button>
-            <button class="btn" onclick="@Cancel">Cancel</button>
+        <div class="form-group">
+                <button type="submit" class="btn btn-default" onclick="@RegisterUser">Register</button>
+                <button class="btn" onclick="@Cancel">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -69,29 +70,32 @@
     string InputAddress { get; set; }
     public Dictionary<string, string> Errors { get; set; } = new Dictionary<string, string>();
 
-    protected async void RegisterUser() 
+    protected async void RegisterUser()
     {
-        if (InputPassword.Equals(InputConfirmPassword)) 
+        if (InputPassword.Equals(InputConfirmPassword))
         {
             var request = new RegistrationRequest()
-                            {
-                                Lastname = InputLastname,
-                                Firstname = InputFirstname,
-                                Email = InputEmail,
-                                Password = InputPassword,
-                                City = InputCity,
-                                Address = InputAddress
-                            };
-            var response = await Http.PotJsonAsync<RegistrationResponse>("api/Registration", request);
-            
+            {
+                Lastname = InputLastname,
+                Firstname = InputFirstname,
+                Email = InputEmail,
+                Password = InputPassword,
+                City = InputCity,
+                Address = InputAddress
+            };
+            var response = await Http.PostJsonAsync<RegistrationResponse>("api/Registration", request);
+
             if (response.IsSuccessful)
                 UriHelper.NavigateTo("/success");
             else
+            {
                 Errors = response.Errors;
+                this.StateHasChanged();
+            }
         }
     }
 
-    protected void Cancel() 
+    protected void Cancel()
     {
         UriHelper.NavigateTo("/");
     }

@@ -2,20 +2,22 @@
 @using RentACar.Shared.Models
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+
 
 <h1>Login</h1>
 
 <div class="container">
     <div class="form-group">
         <label for="email" class="control-label">Email: </label>
-        <input required for="email" bind="@loginRequest.Email" type="email" class="form-control"/>
+        <input required for="email" bind="@loginRequest.Email" type="email" class="form-control" />
     </div>
 
     <div class="form-group">
         <label for="password" class="control-label">Password: </label>
-        <input required for="password" bind="@loginRequest.Password" type="password" class="form-control"/>
+        <input required for="password" bind="@loginRequest.Password" type="password" class="form-control" />
     </div>
-    
+
     @if (!CorrectInfo)
     {
         <div class="error"><em>Email or password wrong</em></div>
@@ -28,15 +30,23 @@
 
 @functions
 {
-    LoginRequest loginRequest { get; set; } = new LoginRequest ();
-    bool CorrectInfo { get; set; } = true;
-    protected async void AttemptLogin ()
-    {
-        var response = await Http.PostJsonAsync<LoginResponse> ("api/Login", loginRequest);
+LoginRequest loginRequest { get; set; } = new LoginRequest();
+bool CorrectInfo { get; set; } = true;
+protected async void AttemptLogin()
+{
+    var response = await Http.PostJsonAsync<LoginResponse>("api/Login", loginRequest);
 
-        if (response.IsSuccessful)
-            UriHelper.NavigateTo ("/success");
-        else
-            CorrectInfo = false;
-    } 
+    if (response.IsSuccessful)
+    {
+        var key = "token";
+        var value = response.Token;
+        await SessionStorage.SetItem(key, value);
+        UriHelper.NavigateTo("/success");
+    }
+    else
+    {
+        CorrectInfo = false;
+        this.StateHasChanged();
+    }
+}
 }

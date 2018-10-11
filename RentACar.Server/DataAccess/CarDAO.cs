@@ -56,6 +56,7 @@ namespace RentACar.Server.DataAccess
                                                  .FirstOrDefault());
         }
 
+        public IEnumerable<Car> GetAllCars() => TryDatabaseQuery(() => db.Cars.AsEnumerable());
 
         public IEnumerable<string> GetAllBrandsForYear(int year)
         {
@@ -64,7 +65,7 @@ namespace RentACar.Server.DataAccess
                                                  .ToHashSet());
         }
 
-        public IEnumerable<string> GetAllModelsForBrand(string brand)
+        public IEnumerable<string> GetModelsForBrand(string brand)
         {
             return TryDatabaseQuery(() => db.Cars.Where(c => c.Brand.Equals(brand))
                                                  .Select(c => c.Model)
@@ -77,10 +78,11 @@ namespace RentACar.Server.DataAccess
             return TryDatabaseQuery(() => db.Cars.Select(c => c.Brand)
                                                  .ToHashSet());
         }
-        public IEnumerable<int> GetAllYears()
+
+        public IEnumerable<string> GetAllModels()
         {
-            return TryDatabaseQuery(() => db.Cars.Select (c => c.Year)
-                                                 .ToHashSet ());
+            return TryDatabaseQuery(() => db.Cars.Select(c => c.Model)
+                                                 .ToHashSet());
         }
 
         public IEnumerable<EngineType> GetAllEngineTypes()
@@ -89,10 +91,132 @@ namespace RentACar.Server.DataAccess
                                                 .ToHashSet());
         }
 
+        public IEnumerable<int> GetAllYears()
+        {
+            return TryDatabaseQuery(() => db.Cars.Select (c => c.Year)
+                                                 .ToHashSet ());
+        }
+
+        public IEnumerable<string> GetAllCities()
+        {
+            return TryDatabaseQuery(() => db.Cars.Select(c => c.User)
+                                                 .Select(u => u.City)
+                                                 .ToHashSet());
+        }
+
         public IEnumerable<int> GetAllYearsForModel(string model)
         {
             return TryDatabaseQuery(() => db.Cars.Where(c => model.Equals(c.Model))
                                                  .Select(m => m.Year)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<EngineType> GetEnginesForBrand(string brand)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => brand.Equals(c.Brand))
+                                                 .Select(c => c.Engine)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<int> GetYearsForBrand(string brand)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => brand.Equals(c.Brand))
+                                                 .Select(c => c.Year)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetCitiesForBrand(string brand)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => brand.Equals(c.Brand))
+                                                 .Select(c => c.User)
+                                                 .Select(u => u.City)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetBrandForModel(string model)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => model.Equals(c.Model))
+                                                 .Select(c => c.Brand)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<EngineType> GetEnginesForModel(string model)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => model.Equals(c.Model))
+                                                 .Select(c => c.Engine)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<int> GetYearsForModel(string model)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => model.Equals(c.Model))
+                                                 .Select(c => c.Year)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetCitiesForModel(string  model)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => model.Equals(c.Model))
+                                                 .Select(c => c.User)
+                                                 .Select(u => u.City)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetBrandsForEngine(EngineType engine)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => engine.Equals(c.Engine))
+                                                 .Select(c => c.Brand)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetModelsForEngine(EngineType engine)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => engine.Equals(c.Engine))
+                                                 .Select(c => c.Model)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<int> GetYearsForEngine(EngineType engine)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => engine.Equals(c.Engine))
+                                                 .Select(c => c.Year)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetCitiesForEngine(EngineType engine)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => engine.Equals(c.Engine))
+                                                 .Select(c => c.User)
+                                                 .Select(u => u.City)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetBrandsForYear(int year)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => year.Equals(c.Year))
+                                                .Select(c => c.Brand)
+                                                .ToHashSet());
+        }
+
+        public IEnumerable<string> GetModelsForYear(int year)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => year.Equals(c.Year))
+                                                .Select(c => c.Model)
+                                                .ToHashSet());
+        }
+
+        public IEnumerable<EngineType> GetEnginesForYear(int year)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => year.Equals(c.Year))
+                                                 .Select(c => c.Engine)
+                                                 .ToHashSet());
+        }
+
+        public IEnumerable<string> GetCitiesForYear(int year)
+        {
+            return TryDatabaseQuery(() => db.Cars.Where(c => year.Equals(c.Year))
+                                                 .Select(c => c.User)
+                                                 .Select(u => u.City)
                                                  .ToHashSet());
         }
     }

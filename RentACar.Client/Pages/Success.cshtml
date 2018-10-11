@@ -1,3 +1,15 @@
 @page "/success"
+@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
 
 <h1>Success!</h1>
+<p>Your token is @Token</p>
+
+@functions
+{
+    public string Token { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        Token = await SessionStorage.GetItem<string>("token");
+    }
+}

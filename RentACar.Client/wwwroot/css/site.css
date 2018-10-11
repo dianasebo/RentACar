@@ -1,23 +1,22 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 body {
-    background-color: #000000;
+    background-color: #17252A;
     color: #FFFFFF;
+    background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
 }
 
 .header {
     display: block;
     width: 100%;
-    padding: 20px;
-    background-color: #000000;
 }
 
 .logo {
     width: 10%;
-    float: left;
     font-family: 'Kelvinized';
     font-size: 35px;
     color: #FFFFFF;
+    margin: 20px;
 }
 
     .logo a {
@@ -26,8 +25,9 @@ body {
     }
 
 .menu-bar {
-    width: 80%;
-    float: left;
+    width: 100%;
+    text-align: right;
+    background-color: #2B7A78;
 }
 
 .clear-float {
@@ -37,21 +37,28 @@ body {
 .menu {
     list-style: none;
     text-align: right;
+    margin-bottom: 0px;
 }
 
 .menu-item {
     display: inline-block;
-    margin: 5px;
+    margin: 2px 10px 2px 10px;
+    text-shadow: 2px 2px 5px black;
 }
 
     .menu-item a {
         color: #FFFFFF;
-        font-weight: bold;
+        font-weight: 500;
+        font-size: 18px;
+        text-decoration: none;
     }
 
-    .menu-item a:hover {
-        color: #CACACA;
-        text-decoration: none;
+    .menu-item:hover {
+        text-shadow: 0px 0px 0px;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
 
 .main {
@@ -59,34 +66,39 @@ body {
 }
 
 .selected {
-    font-style: italic;
+    text-shadow: 0px 0px 0px;
 }
 
 .container {
     padding-top: 5%;
     width: 100%;
-}
-
-.row{
-    padding: 2.5px;
-}
-
-.col input {
-    float: right;
-}
-
-.center {
-    text-align: right;
-}
-
-.filters {
-    width: 100%;
-    padding: 30px;
-    background-image: url("../images/audi_bg.jpg");
+    margin: 0;
     background-size: cover;
 }
 
-.form-control {
-    margin: 10px;
+.field-container {
+    width: 100%;
+    padding: 30px;
+    background-size: cover;
+}
+
+.search-page-background {
+    background-image: url("../images/search-bg.jpg");
+}
+
+.create-page-background {
+    background-image: url("../images/create-bg.jpg");
+}
+
+.register-background {
+    background-image: url("../images/register-bg.jpg");
+}
+
+.format {
     width: 30%;
+}
+
+.centered-content {
+    width: 40%;
+    margin: auto;
 }

@@ -31,6 +31,8 @@ namespace RentACar.Server.DataAccess
             });
         }
 
+        public User GetUserByEmail(string email) => TryDatabaseQuery(() => db.UserInfo.Where(u => u.Email.Equals(email)).Single());
+
         public User GetUserById(int id) => TryDatabaseQuery(() => db.UserInfo.Find (id));
 
         public void DeleteById (int id) 

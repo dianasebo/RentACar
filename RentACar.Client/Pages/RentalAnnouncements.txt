@@ -1,0 +1,135 @@
+﻿@page "/announcements"
+@using RentACar.Shared.Models
+@inject HttpClient Http
+
+@if (Brands == null)
+{
+    <p>Loading brands...</p>
+}
+else
+{ 
+    <h1> Rental Announcements </h1>
+
+    
+
+}
+
+
+
+@functions
+{
+    List<string> Brands { get; set; } = new List<string>();
+    List<string> Models { get; set; } = new List<string>();
+    List<EngineType> EngineTypes { get; set; } = new List<EngineType>();
+    List<int> Years { get; set; } = new List<int>();
+    List<string> Cities { get; set; } = new List<string>();
+
+    string SelectedBrand { get; set; } = null;
+    string SelectedModel { get; set; } = null;
+    EngineType? SelectedEngineType { get; set; } = null;
+    int? SelectedYear { get; set; } = null;
+    string SelectedCity { get; set; } = null;
+
+    protected async override Task OnInitAsync ()
+    {
+        Brands = await Http.GetJsonAsync<List<string>>("api/Cars/Brands");
+        Models = await Http.GetJsonAsync<List<string>>("api/Cars/Models");
+        EngineTypes = await Http.GetJsonAsync<List<EngineType>>("api/Cars/Engine");
+        Years = await Http.GetJsonAsync<List<int>>("api/Cars/Years");
+        Cities = await Http.GetJsonAsync<List<string>>("api/Cars/Cities");
+    }
+
+    protected async void BrandClicked(UIChangeEventArgs brandEvent)
+    {
+        SelectedBrand = brandEvent.Value.ToString();
+
+        SelectedModel = null;
+        Models.Clear();
+        Models = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedBrand}/ModelsForBrand");
+
+        SelectedEngineType = null;
+        EngineTypes.Clear();
+        EngineTypes = await Http.GetJsonAsync<List<EngineType>>($"api/Cars/{SelectedBrand}/EnginesForBrand");
+
+        SelectedYear = null;
+        Years.Clear();
+        Years = await Http.GetJsonAsync<List<int>>($"api/Cars/{SelectedBrand}/YearsForBrand");
+
+        SelectedCity = null;
+        Cities.Clear();
+        Cities = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedBrand}/CitiesForBrand");
+
+        this.StateHasChanged();
+    }
+
+    protected async void ModelClicked(UIChangeEventArgs modelEvent)
+    {
+        SelectedModel = modelEvent.Value.ToString();
+
+        if (SelectedBrand == null)
+            Brands = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedModel}/BrandForModel");
+
+        EngineTypes.Clear();
+        EngineTypes = await Http.GetJsonAsync<List<EngineType>>($"api/Cars/{SelectedModel}/EnginesForModel");
+
+        Years.Clear();
+        Years = await Http.GetJsonAsync<List<int>>($"api/Cars/{SelectedModel}/YearsForModel");
+
+        Cities.Clear();
+        Cities = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedModel}/CitiesForModel");
+
+        this.StateHasChanged();
+    }
+
+    protected async void EngineClicked(UIChangeEventArgs engineEvent)
+    {
+        EngineType selectedEngineType;
+        Enum.TryParse<EngineType>(engineEvent.Value.ToString(), out selectedEngineType);
+        SelectedEngineType = selectedEngineType;
+        if(SelectedBrand == null)
+            Brands = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedEngineType}/BrandsForEngine");
+        if(SelectedModel == null)
+            Models = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedEngineType}/ModelsForEngine");
+
+        Years.Clear();
+        Years = await Http.GetJsonAsync<List<int>>($"api/Cars/{SelectedEngineType}/YearsForEngine");
+
+        Cities.Clear();
+        Cities = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedEngineType}/CitiesForEngine");
+
+    }
+
+    protected async void YearClicked(UIChangeEventArgs yearEvent)
+    {
+        int year;
+        int.TryParse(yearEvent.Value.ToString(), out year);
+        SelectedYear = year;
+        if (SelectedBrand == null)
+            Brands = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedYear}/BrandsForYear");
+        if (SelectedModel == null)
+            Models = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedYear}/ModelsForYear");
+        if (SelectedEngineType == null)
+            EngineTypes = await Http.GetJsonAsync<List<EngineType>>($"api/Cars/{SelectedYear}/EnginesForYear");
+
+        Cities.Clear();
+        Cities = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedYear}/CitiesForYear");
+
+        this.StateHasChanged();
+    }
+
+    protected async void CityClicked(UIChangeEventArgs cityEvent)
+    {
+        SelectedCity = cityEvent.Value.ToString();
+
+        //if (SelectedBrand == null)
+        //    Brands = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedCity}/BrandsForCity");
+        //if (SelectedModel == null)
+        //    Models = await Http.GetJsonAsync<List<string>>($"api/Cars/{SelectedCity}/ModelsForCity");
+        //if (SelectedEngineType == null)
+        //    EngineTypes = await Http.GetJsonAsync<List<EngineType>>($"api/Cars/{SelectedCity}/EnginesForCity");
+        //if (SelectedYear == null)
+        //    Years = await Http.GetJsonAsync<List<int>>($"api/Cars/{SelectedCity}/YearsForCity");
+
+        this.StateHasChanged();
+    }
+}

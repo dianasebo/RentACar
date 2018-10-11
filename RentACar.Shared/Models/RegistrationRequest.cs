@@ -11,6 +11,7 @@ namespace RentACar.Shared.Models
 
         public User CreateUser () => new User () 
         {
+            Email = Email,
             Lastname = Lastname,
             Firstname = Firstname,
             City = City,

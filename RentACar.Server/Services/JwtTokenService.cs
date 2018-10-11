@@ -18,9 +18,9 @@ namespace RentACar.Server.Services
 
         public string BuildToken (string email) 
         {
-            var claims = new[] 
+            var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim(ClaimTypes.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

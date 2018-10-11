@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RentACar.Server.DataAccess;
 using RentACar.Server.Services;
-using RentACar.Shared.Models;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
@@ -57,8 +55,8 @@ namespace RentACar.Server
                     })
                     .AddJwtBearer(options => 
                     {
-                        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                        {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        { 
                             ValidateIssuer = true,
                             ValidateAudience = true,
                             ValidateLifetime = true,

@@ -1,0 +1,56 @@
+﻿@page "/announcements"
+@using RentACar.Shared.Models
+@inject HttpClient Http
+
+<div class="field-container search-page-background">
+
+    <div class="form-group">
+        <label for="brand"> Brand: </label>
+        <input type="text" name="brand" class="form-control format" bind="@InputBrand" />
+    </div>
+
+    <div class="form-group">
+        <label for="model"> Model: </label>
+        <input type="text" name="model" class="form-control format" bind="@InputModel" />
+    </div>
+
+    <div class="form-group">
+        <label for="engine"> Engine: </label>
+        <input type="text" name="engine" class="form-control format" bind="@InputBrand" />
+    </div>
+
+    <div class="form-group">
+        <label for="year"> Year: </label>
+        <input type="text" name="year" class="form-control format" bind="@InputYear" />
+    </div>
+
+    <div class="form-group">
+        <label for="city"> City: </label>
+        <input type="text" name="city" class="form-control format" bind="@InputCity" />
+    </div>
+
+    <div class="form-group">
+        <label for="from"> From: </label>
+        <input type="date" name="from" class="form-control format" bind="@InputFrom" format-value="yyyy-MM-dd" value=""/>
+
+        <label for="to"> To: </label>
+        <input type="date" name="from" class="form-control format" bind="@InputTo" format-value="yyyy-MM-dd" value=""/>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-default" onclick="">Search</button>
+        <button class="btn" onclick="">Cancel</button>
+    </div>
+</div>
+
+
+
+@functions
+{
+    string InputBrand { get; set; }
+    string InputModel { get; set; }
+    string InputYear { get; set; }
+    string InputCity { get; set; }
+    DateTime InputFrom { get; set; }
+    DateTime InputTo { get; set; }
+}

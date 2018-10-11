@@ -9,6 +9,7 @@ using RentACar.Server.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentACar.Server.Controllers
 {

@@ -1,0 +1,123 @@
+@page "/create"
+@using System
+@using System.Text
+@using RentACar.Shared.Models
+@using System.Net.Http.Headers
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+
+<div class="field-container create-page-background">
+    <div class="form-group">
+        <label for="brand" class="control-label">Brand: </label>
+        <input for="brand" bind="@InputBrand" placeholder="@BrandPlaceholder" type="text" class="form-control format" />
+    </div>
+    <div class="form-group">
+        <label for="model" class="control-label">Model: </label>
+        <input for="model" bind="@InputModel" placeholder="@ModelPlaceholder" type="text" class="form-control format" />
+    </div>
+    <div class="form-group">
+        <label for="year" class="control-label">Year: </label>
+        <input for="year" bind="@InputYear" placeholder="@YearPlaceholder" type="number" class="form-control format" />
+    </div>
+    <div class="form-group">
+        <label for="engine" class="control-label">Engine: </label>
+        <select class="form-control format" onchange="@OnEngineSelect">
+            <option value="">-- Select Engine Type --</option>
+            @foreach (var engineType in Enum.GetValues(typeof(EngineType)))
+            {
+                <option value="@engineType">@engineType</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="seats" class="control-label">Seat count: </label>
+        <input for="seats" bind="@InputSeats" placeholder="@SeatsPlaceholder" type="number" class="form-control format" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default" onclick="@(async () => await CreateCar())">Save</button>
+        <button class="btn" onclick="@Cancel">Cancel</button>
+    </div>
+</div>
+
+@functions
+{
+    private string token;
+
+    Car car { get; set; }
+    string InputBrand { get; set; }
+    string InputModel { get; set; }
+    string InputYear { get; set; }
+    string InputEngineType { get; set; }
+    string InputSeats { get; set; }
+
+    string BrandPlaceholder { get; set; }
+    string ModelPlaceholder { get; set; }
+    string YearPlaceholder { get; set; }
+    string SeatsPlaceholder { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        token = await SessionStorage.GetItem<string> ("token");
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //string randomBrand = await Http.GetStringAsync("api/Cars/Brands/Random");
+        //BrandPlaceholder = $"ex: {randomBrand}";
+        //int randomYear = await Http.GetJsonAsync<int>("api/Cars/Years/Random");
+        //YearPlaceholder = $"ex: {randomYear}";
+    }
+
+    /*protected async Task UpdateModelPlaceholder(UIChangeEventArgs brandChangeEvent)
+    {
+        InputBrand = brandChangeEvent.Value.ToString();
+        string randomModel = await Http.GetStringAsync($"api/Cars/{InputBrand}/Models/Random");
+        ModelPlaceholder = $"ex: {randomModel}";
+        this.StateHasChanged();
+    }
+
+    protected async Task UpdateYearPlaceholder(UIChangeEventArgs modelChangeEvent)
+    {
+        InputModel = modelChangeEvent.Value.ToString();
+        // int randomYearForModel = await Http.GetJsonAsync<int>($"api/Cars/{InputModel}/Random");
+        // YearPlaceholder = $"ex: {randomYearForModel}";
+        // this.StateHasChanged();
+    } */
+
+    protected void OnEngineSelect(UIChangeEventArgs engineChangeEvent)
+    {
+        InputEngineType = engineChangeEvent.Value.ToString();
+    }
+
+    protected async Task CreateCar()
+    {
+        car = new Car()
+        {
+            Brand = InputBrand,
+            Model = InputModel,
+            Year = int.Parse(InputYear),
+            Engine = (EngineType)Enum.Parse(typeof(EngineType), InputEngineType),
+            Seats = int.Parse(InputSeats)
+        };
+        try
+        {
+            var requestJson = Json.Serialize(car);
+            Console.WriteLine(token);
+            var response = await Http.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/api/Cars/Create")
+            {
+                Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
+            });
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("exceptionnn");
+            Console.WriteLine(e);
+        }
+        Console.WriteLine("no exceptionnn");
+        //UriHelper.NavigateTo("/");
+    }
+
+    protected void Cancel()
+    {
+        UriHelper.NavigateTo("/");
+    }
+}

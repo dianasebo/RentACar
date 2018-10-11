@@ -1,18 +1,44 @@
 ﻿<ul class="menu">
+
     <li class="menu-item">
-        <span class="oi oi-home" aria-hidden="true"></span>
-        <NavLink  href=""> Home </NavLink>
+        <NavLink ActiveClass="selected" href="index">
+            <span class="oi oi-home" aria-hidden="true"></span>
+            Home
+        </NavLink>
     </li>
+
     <li class="menu-item">
-        <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
-        <NavLink ActiveClass="selected" href="announcements"> Rental Announcements </NavLink>
+        <NavLink ActiveClass="selected" href="announcements">
+            <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
+            Search announcements
+        </NavLink>
     </li>
+
     <li class="menu-item">
-        <span class="oi oi-plus" aria-hidden="true"></span>
-        <NavLink ActiveClass="selected" href="announcements/create">Create announcement</NavLink>
+        <NavLink ActiveClass="selected" href="create">
+            <span class="oi oi-plus" aria-hidden="true"></span>
+            Create announcement
+        </NavLink>
     </li>
+
     <li class="menu-item">
-        <span class="oi oi-person" aria-hidden="true"></span>
-        <NavLink ActiveClass="selected" href="register"> Register </NavLink>
-    </li>    
+        <NavLink ActiveClass="selected" href="register">
+            <span class="oi oi-person" aria-hidden="true"></span>    
+            Register 
+        </NavLink>
+    </li>
+
+    <li class="menu-item">
+        <NavLink ActiveClass="selected" href="login">
+            <span class="oi oi-account-login" aria-hidden="true"></span>
+            Log in 
+        </NavLink>
+    </li>
+
+    <li class="menu-item">
+        <NavLink ActiveClass="selected" href="logout">
+            <span class="oi oi-account-logout" aria-hidden="true"></span>
+            Log out
+        </NavLink>
+    </li>
 </ul>

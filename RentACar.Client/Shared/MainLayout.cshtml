@@ -1,16 +1,37 @@
 ﻿@inherits BlazorLayoutComponent
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
 <div class="header">
     <div class="logo">
-        <a href="/index">
-            RentACar
+        <a href="/">
+            @PageTitle
         </a>
     </div>
     <div class="menu-bar">
-        <NavMenu/>
+        <NavMenu />
     </div>
 </div>
 
 <div class="main">
-        @Body
+    @Body
 </div>
+
+@functions 
+{
+    public string PageTitle { get; set; } = "RentACar";
+
+    protected override void OnInit()
+    {
+        UriHelper.OnLocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object sender, string newLocation)
+    {
+        string currentPage = newLocation.Split('/').LastOrDefault();
+        PageTitle = "RentACar";
+        if (!string.IsNullOrEmpty(currentPage))
+            PageTitle += $"/{currentPage}";
+        this.StateHasChanged();
+    }
+
+}

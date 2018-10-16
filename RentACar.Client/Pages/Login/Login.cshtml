@@ -4,10 +4,7 @@
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 @inject Blazor.Extensions.Storage.SessionStorage SessionStorage
 
-
-<h1>Login</h1>
-
-<div class="container">
+<div class="field-container centered-content">
     <div class="form-group">
         <label for="email" class="control-label">Email: </label>
         <input required for="email" bind="@loginRequest.Email" type="email" class="form-control" />
@@ -30,23 +27,26 @@
 
 @functions
 {
-LoginRequest loginRequest { get; set; } = new LoginRequest();
-bool CorrectInfo { get; set; } = true;
-protected async void AttemptLogin()
-{
-    var response = await Http.PostJsonAsync<LoginResponse>("api/Login", loginRequest);
+    LoginRequest loginRequest { get; set; } = new LoginRequest();
+    bool CorrectInfo { get; set; } = true;
+    protected async void AttemptLogin()
+    {
+        var response = await Http.PostJsonAsync<LoginResponse>("api/Login", loginRequest);
 
-    if (response.IsSuccessful)
-    {
-        var key = "token";
-        var value = response.Token;
-        await SessionStorage.SetItem(key, value);
-        UriHelper.NavigateTo("/success");
+        if (response.IsSuccessful)
+        {
+            var tokenKey = "token";
+            var tokenValue = response.Token;
+            await SessionStorage.SetItem(tokenKey, tokenValue);
+
+            var isUserLoggedIn = "isUserLoggedIn";
+            await SessionStorage.SetItem<bool>(isUserLoggedIn, true);
+            UriHelper.NavigateTo("/");
+        }
+        else
+        {
+            CorrectInfo = false;
+            this.StateHasChanged();
+        }
     }
-    else
-    {
-        CorrectInfo = false;
-        this.StateHasChanged();
-    }
-}
 }

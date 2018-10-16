@@ -1,15 +1,6 @@
 @page "/success"
-@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
 
-<h1>Success!</h1>
-<p>Your token is @Token</p>
-
-@functions
-{
-    public string Token { get; set; }
-
-    protected override async Task OnInitAsync()
-    {
-        Token = await SessionStorage.GetItem<string>("token");
-    }
-}
+<div class="centered-content">
+    <h3>You have successfuly created an account!</h3>
+    <h5><NavLink href="/login">Log in </NavLink> and then head over to the <NavLink href="/search"> search page </NavLink> in order to find a car.</h5>
+</div>

@@ -1,14 +1,16 @@
-﻿<ul class="menu">
+﻿@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+
+<ul class="menu">
 
     <li class="menu-item">
-        <NavLink ActiveClass="selected" href="index">
+        <NavLink ActiveClass="selected" href="">
             <span class="oi oi-home" aria-hidden="true"></span>
             Home
         </NavLink>
     </li>
 
     <li class="menu-item">
-        <NavLink ActiveClass="selected" href="announcements">
+        <NavLink ActiveClass="selected" href="search">
             <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
             Search announcements
         </NavLink>
@@ -23,15 +25,15 @@
 
     <li class="menu-item">
         <NavLink ActiveClass="selected" href="register">
-            <span class="oi oi-person" aria-hidden="true"></span>    
-            Register 
+            <span class="oi oi-person" aria-hidden="true"></span>
+            Register
         </NavLink>
     </li>
 
     <li class="menu-item">
         <NavLink ActiveClass="selected" href="login">
             <span class="oi oi-account-login" aria-hidden="true"></span>
-            Log in 
+            Log in
         </NavLink>
     </li>
 
@@ -42,3 +44,26 @@
         </NavLink>
     </li>
 </ul>
+
+@functions
+{
+    private bool isUserLoggedIn = false;
+    public bool IsUserLoggedIn
+    {
+        get
+        {
+            GetLoginStatus();
+            return isUserLoggedIn;
+        }
+        set
+        {
+            isUserLoggedIn = value;
+        }
+    }
+
+    public async Task GetLoginStatus()
+    {
+        Console.WriteLine("got login status");
+        isUserLoggedIn = await SessionStorage.GetItem<bool>("isUserLoggedIn");
+    }
+}

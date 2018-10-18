@@ -1,0 +1,36 @@
+<svg viewBox="0 0 100 100" 
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <g>
+    <defs>
+      <path id="linie" d="M 20 45.3 H 50 V 47 L 20 53" stroke="black" stroke-width=".5" fill="#2B7A78" />
+    </defs>
+
+    <use xlink:href="#linie"/>
+    <use xlink:href="#linie" transform="rotate(45 50 50)"/>
+    <use xlink:href="#linie" transform="rotate(90 50 50)"/>
+    <use xlink:href="#linie" transform="rotate(135 50 50)"/>      
+    <use xlink:href="#linie" transform="rotate(180 50 50)"/>
+    <use xlink:href="#linie" transform="rotate(225 50 50)"/>
+    <use xlink:href="#linie" transform="rotate(270 50 50)"/>      
+    <use xlink:href="#linie" transform="rotate(315 50 50)"/>
+    
+    <circle cx="50" cy="50" r="5" fill="black"/>
+    
+
+    <circle cx="50" cy="50" r="34" fill="none" stroke="black" stroke-width="1.6" stroke-dasharray="3 1 4 2 5 1"/>
+    <circle cx="50" cy="50" r="29" fill="none" stroke="black" stroke-width="10"/>  
+
+    <circle cx="50" cy="50" r="26" fill="none" stroke="white" stroke-width=".5"/>  
+    <circle cx="50" cy="50" r="4" stroke="white" stroke-dasharray="1.2 3" /> 
+    <circle cx="50" cy="50" r="2" fill="white"/>
+    <animateTransform attributeName="transform"
+                      attributeType="XML" 
+                      type="rotate"
+                      from="0 50 50"
+                      to="360 50 50"
+                      dur="6s"
+                      repeatCount="indefinite"/>
+   </g>
+</svg>

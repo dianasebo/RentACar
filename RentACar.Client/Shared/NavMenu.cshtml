@@ -36,7 +36,7 @@
             Log in
         </NavLink>
     </li>
-
+    
     <li class="menu-item">
         <NavLink ActiveClass="selected" href="logout">
             <span class="oi oi-account-logout" aria-hidden="true"></span>
@@ -44,26 +44,3 @@
         </NavLink>
     </li>
 </ul>
-
-@functions
-{
-    private bool isUserLoggedIn = false;
-    public bool IsUserLoggedIn
-    {
-        get
-        {
-            GetLoginStatus();
-            return isUserLoggedIn;
-        }
-        set
-        {
-            isUserLoggedIn = value;
-        }
-    }
-
-    public async Task GetLoginStatus()
-    {
-        Console.WriteLine("got login status");
-        isUserLoggedIn = await SessionStorage.GetItem<bool>("isUserLoggedIn");
-    }
-}

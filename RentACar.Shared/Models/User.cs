@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,5 +12,6 @@ namespace RentACar.Shared.Models {
         [Required] [Column("firstname")] public string Firstname { get; set; }
         [Column("city")] public string City { get; set; }
         [Column("address")] public string Address { get; set; }
+        public ICollection<Car> Cars { get; set; }
     }
 }

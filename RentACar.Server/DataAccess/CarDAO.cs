@@ -1,7 +1,9 @@
-﻿using RentACar.Shared.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RentACar.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RentACar.Server.DataAccess
@@ -9,12 +11,27 @@ namespace RentACar.Server.DataAccess
     public class CarDAO : BaseDAO 
     {
         
-
-        public void AddCar(Car car) 
+        public void AddCarPicture(CarPicture carPicture)
         {
             TryDatabaseQuery(() => {
+                db.CarPictures.Add (carPicture);
+                db.SaveChanges ();
+            });
+        }
+
+        public byte[] GetPictureForCar (int carId) {
+            return TryDatabaseQuery(() => {
+                var car = db.Cars.Where(c => c.CarId == carId).Include(c => c.Pictures).Single();
+                return car.Pictures.First().Picture;
+            });
+        }
+        
+        public int AddCar(Car car) 
+        {
+            return TryDatabaseQuery(() => {
                 db.Cars.Add (car);
                 db.SaveChanges ();
+                return car.CarId;
             });
         }
 

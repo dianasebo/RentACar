@@ -27,25 +27,31 @@ namespace RentACar.Server.Controllers
 
         [HttpPost]
         [Route("api/Registration")]
-        public async Task<RegistrationResponse> Registration([FromBody] RegistrationRequest registrationRequest)
+        public async Task<RegistrationResponse> Registration([FromBody] RegistrationRequest registrationRequest) 
         {
-            var result = await userManager.CreateAsync(new IdentityUser()
+            var result = await userManager.CreateAsync(new IdentityUser() 
             {
                 UserName = registrationRequest.Email,
                 Email = registrationRequest.Email
             }, registrationRequest.Password);
 
-            if (result.Succeeded) 
+            if (result.Succeeded)
                 userDAO.AddUser(registrationRequest.CreateUser());
 
-            var response = new RegistrationResponse() 
-                            {
-                                IsSuccessful = result.Succeeded,
-                                Errors = result.Errors.ToDictionary(k => k.Code, v => v.Description)
-                            };
-            return response;
-                            
+            var errors = new Dictionary<string, IEnumerable<string>> ();
+            errors.Add("password", GetErrors(result, "Password"));
+            errors.Add("email", GetErrors(result, "Email"));
+            errors.Add("username", GetErrors(result, "UserName").Select(e => e.Replace("User name", "Email")));
+
+            return new RegistrationResponse() {
+                IsSuccessful = result.Succeeded,
+                Errors = errors
+            };
         }
+
+        private IEnumerable<string> GetErrors(IdentityResult result, string code)
+            => result.Errors.Where(e => e.Code.Contains(code)).Select(e => e.Description);
+
 
         [HttpPost]
         [Route ("api/Login")]

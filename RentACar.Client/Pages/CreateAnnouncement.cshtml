@@ -34,27 +34,30 @@
         <label for="seats" class="control-label">Seat count: </label>
         <input for="seats" bind="@Car.Seats" type="number" class="form-control format" />
     </div>
+
+    <input type="file" onchange="@UploadFile" id="getFileData" />
+
     <div class="form-group">
         <button type="submit" class="btn btn-default" onclick="@CreateCar">Save</button>
         <button class="btn" onclick="@Cancel">Cancel</button>
     </div>
-    @if (AddedSuccesfully != null)
+    @if (!Success)
     {
-        @if (AddedSuccesfully == true)
-        {
-            <div style="color: green"><em>Car added to you collection</em></div>
-        }
-        else
-        {
-            <div style="color: red"><em>There was an error</em></div>
-        }
+        <div style="color: red">There was an error</div>
+    }
+    else if (Count > 0)
+    {
+        <div style="color: green">@Count car(s) added to you collection</div>
     }
 </div>
 
 @functions
 {
-    public Car Car { get; set; }
-    public bool? AddedSuccesfully { get; set; }
+
+    public List<ByteArrayContent> Pictures { get; set; } = new List<ByteArrayContent>();
+    public Car Car { get; set; } = new Car();
+    public int Count { get; set; }
+    public bool Success { get; set; } = true;
 
     protected override async Task OnInitAsync()
     {
@@ -62,29 +65,34 @@
         Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
+    protected async Task CreateCar()
+    {
+        try
+        {
+            int carId = await Http.PostJsonAsync<int>("api/Cars/Create", Car);
+            if (carId != 0)
+                foreach (var picture in Pictures)
+                    await Http.PostAsync($"/api/Cars/{carId}/AddPicture", picture);
+        }
+        catch
+        {
+            Success = false;
+        }
+        Count++;
+            
+    }
+
+    async Task UploadFile()
+    {
+        var data = await JsInterop.GetFileData("getFileData");
+        Pictures.Add(new ByteArrayContent(Convert.FromBase64String(data)));
+    }
+
     protected void OnEngineSelect(UIChangeEventArgs engineChangeEvent)
     {
         EngineType engine;
         Enum.TryParse(engineChangeEvent.Value.ToString(), out engine);
         Car.Engine = engine;
-    }
-
-    protected async Task CreateCar()
-    {
-        try
-        {
-            var requestJson = Json.Serialize(Car);
-            var response = await Http.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/api/Cars/Create")
-            {
-                Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
-            });
-            response.EnsureSuccessStatusCode();
-        }
-        catch
-        {
-            AddedSuccesfully = false;
-        }
-        AddedSuccesfully = true;
     }
 
     protected void Cancel()

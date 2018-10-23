@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentACar.Client;
@@ -10,26 +14,50 @@ using RentACar.Shared.Models;
 
 namespace RentACar.Server.Controllers
 {
-    [Authorize]
     public class CarController : Controller
     {
+        private static int lastAddedCarId;
         CarDAO carDAO = new CarDAO();
         UserDAO userDAO = new UserDAO();
 
+        [Authorize]
         [HttpPost]
         [Route ("api/Cars/Create")]
-        public void Create([FromBody] Car car) 
+        public int Create([FromBody] Car car)
         {
-            string email = User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value;
+            string email = User.FindFirst(ClaimTypes.Email).Value;
             User user = userDAO.GetUserByEmail(email);
             car.UserID = user.UserId;
-
             if (ModelState.IsValid)
-                carDAO.AddCar (car);
+                return carDAO.AddCar(car);
+            return 0;
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route ("api/Cars/{carId}/AddPicture")]
+        public void AddPicture(int carId)
+        {
+            if (ModelState.IsValid) {
+                var memoryStream = new MemoryStream();
+                Request.Body.CopyToAsync(memoryStream);
+                var carPicture = new CarPicture()
+                { 
+                    CarId = carId,
+                    Picture = memoryStream.ToArray()
+                };
+                carDAO.AddCarPicture(carPicture);
+            }
         }
 
 
         //---------- functions used for initialization ----------
+
+        [HttpGet]
+        [Route("api/Cars/{carId}/Picture")]
+        public IActionResult GetPicture(int carId) {
+            return File(carDAO.GetPictureForCar(carId), "image/jpeg");
+        }
 
         [HttpGet]
         [Route("api/Cars")]

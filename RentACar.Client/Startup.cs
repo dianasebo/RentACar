@@ -10,12 +10,12 @@ namespace RentACar.Client
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddStorage();
-            //services.AddLoadingBar();
+            services.AddLoadingBar();
         }
 
         public void Configure(IBlazorApplicationBuilder app)
         {
-            //app.UseLoadingBar();
+            app.UseLoadingBar();
             app.AddComponent<App>("app");
         }
     }

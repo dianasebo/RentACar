@@ -32,8 +32,6 @@ namespace RentACar.Server
 
             services.AddMvc();
 
-            services.AddDbContext<RentACarContext>();
-
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<RentACarContext>();
 

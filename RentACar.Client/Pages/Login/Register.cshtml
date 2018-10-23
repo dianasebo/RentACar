@@ -25,6 +25,18 @@
                 <input required for="email" bind="@InputEmail" type="email" class="form-control"/>
             </div>
 
+            @if (Errors != null)
+            {
+                @foreach (var error in Errors["email"])
+                {
+                    <div><em style="color: red">@error</em></div>
+                }
+                @foreach (var error in Errors["username"])
+                {
+                    <div><em style="color: red">@error</em></div>
+                }
+            }
+
             <div class="form-group">
                 <label for="password" class="control-label">Password: </label>
                 <input required for="password" bind="@InputPassword" type="password" class="form-control"/>
@@ -35,11 +47,11 @@
                 <input required for="confirmpassword" bind="@InputConfirmPassword" type="password" class="form-control"/>
             </div>
 
-            @foreach (var error in Errors)
+            @if (Errors != null)
             {
-                @if (error.Key.Contains("Password"))
+                @foreach (var error in Errors["password"])
                 {
-                    <div><em style="color: red">@error.Value</em></div>
+                    <div><em style="color: red">@error</em></div>
                 }
             }
 
@@ -70,7 +82,7 @@
     string InputConfirmPassword { get; set; }
     string InputCity { get; set; }
     string InputAddress { get; set; }
-    public Dictionary<string, string> Errors { get; set; } = new Dictionary<string, string>();
+    public Dictionary<string, IEnumerable<string>> Errors { get; set; }
 
     protected async void RegisterUser()
     {

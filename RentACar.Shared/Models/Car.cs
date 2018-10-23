@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RentACar.Shared.Models
 {
     [Table("cars")]
@@ -14,5 +16,7 @@ namespace RentACar.Shared.Models
         [Required] [Column("engine")] public EngineType Engine { get; set; }
         [Required] [Column("seats")] public int Seats { get; set; }
         public User User { get; set; }
+        public ICollection<CarPicture> Pictures { get; set; }
+
     }
 }

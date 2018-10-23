@@ -29,6 +29,7 @@
 {
     LoginRequest loginRequest { get; set; } = new LoginRequest();
     bool CorrectInfo { get; set; } = true;
+
     protected async void AttemptLogin()
     {
         var response = await Http.PostJsonAsync<LoginResponse>("api/Login", loginRequest);
@@ -38,9 +39,6 @@
             var tokenKey = "token";
             var tokenValue = response.Token;
             await SessionStorage.SetItem(tokenKey, tokenValue);
-
-            var isUserLoggedIn = "isUserLoggedIn";
-            await SessionStorage.SetItem<bool>(isUserLoggedIn, true);
             UriHelper.NavigateTo("/");
         }
         else

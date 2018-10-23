@@ -6,25 +6,26 @@
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<div class="field-container register-background">
-    <div class="centered-content">
-        <div class="dialog-box">
-            <p>Already have an account? <NavLink href="/login">Log in!</NavLink></p>
-            <div class="form-group">
-                <label for="lastname" class="control-label">Last name: </label>
-                <input required for="lastname" bind="@InputLastname" type="text" class="form-control"/>
-            </div>
+<div class="register-background">
 
-            <div class="form-group">
-                <label for="firstname" class="control-label">First name: </label>
-                <input required for="firstname" bind="@InputFirstname" type="text" class="form-control"/>
-            </div>
+    <div class="centered-content dialog-box">
 
-            <div class="form-group">
-                <label for="email" class="control-label">Email: </label>
-                <input required for="email" bind="@InputEmail" type="email" class="form-control"/>
-            </div>
+        <p>Already have an account? <NavLink href="/login">Log in!</NavLink></p>
+        <div class="form-group">
+            <label for="lastname" class="control-label">Last name: </label>
+            <input required for="lastname" bind="@InputLastname" type="text" class="form-control" />
+        </div>
 
+        <div class="form-group">
+            <label for="firstname" class="control-label">First name: </label>
+            <input required for="firstname" bind="@InputFirstname" type="text" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="control-label">Email: </label>
+            <input required for="email" bind="@InputEmail" type="email" class="form-control" />
+        </div>
+        
             @if (Errors != null)
             {
                 @foreach (var error in Errors["email"])
@@ -42,10 +43,10 @@
                 <input required for="password" bind="@InputPassword" type="password" class="form-control"/>
             </div>
 
-            <div class="form-group">
-                <label for="confirmpassword" class="control-label">Confirm Password: </label>
-                <input required for="confirmpassword" bind="@InputConfirmPassword" type="password" class="form-control"/>
-            </div>
+        <div class="form-group">
+            <label for="confirmpassword" class="control-label">Confirm Password: </label>
+            <input required for="confirmpassword" bind="@InputConfirmPassword" type="password" class="form-control" />
+        </div>
 
             @if (Errors != null)
             {
@@ -55,22 +56,23 @@
                 }
             }
 
-            <div class="form-group">
-                <label for="city" class="control-label">City: </label>
-                <input for="city" bind="@InputCity" type="text" class="form-control"/>
-            </div>
-
-            <div class="form-group">
-                <label for="address" class="control-label">Address: </label>
-                <input for="address" bind="@InputAddress" type="text" class="form-control"/>
-            </div>
-
-            <div class="form-group">
-                    <button type="submit" class="btn btn-default" onclick="@RegisterUser">Register</button>
-                    <button class="btn" onclick="@Cancel">Cancel</button>
-            </div>
+        <div class="form-group">
+            <label for="city" class="control-label">City: </label>
+            <input for="city" bind="@InputCity" type="text" class="form-control" />
         </div>
+
+        <div class="form-group">
+            <label for="address" class="control-label">Address: </label>
+            <input for="address" bind="@InputAddress" type="text" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn" onclick="@RegisterUser">Register</button>
+            <button class="btn" onclick="@Cancel">Cancel</button>
+        </div>
+
     </div>
+
 </div>
 
 @functions
@@ -97,8 +99,9 @@
                 City = InputCity,
                 Address = InputAddress
             };
+            Console.WriteLine("sending the request");
             var response = await Http.PostJsonAsync<RegistrationResponse>("api/Registration", request);
-
+            Console.WriteLine("sent the request");
             if (response.IsSuccessful)
                 UriHelper.NavigateTo("/success");
             else
@@ -111,6 +114,6 @@
 
     protected void Cancel()
     {
-        UriHelper.NavigateTo("/");
+        UriHelper.NavigateTo("/index");
     }
 }

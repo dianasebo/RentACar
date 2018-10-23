@@ -77,30 +77,40 @@ body {
 }
 
 .field-container {
-    width: 100%;
+    width: 20%;
     padding: 30px;
-    background-size: cover;
+    float: left;
 }
 
 .search-page-background {
+    background-size: cover;
     background-image: url("../images/search-bg.jpg");
 }
 
 .create-page-background {
+    background-size: cover;
     background-image: url("../images/create-bg.jpg");
 }
 
-.register-background {
-    background-image: url("../images/register-bg.jpg");
+.login-page-background {
+    background-size: cover;
+    background-image: url("../images/login-bg.jpg");
+    padding: 20px;
 }
 
-.format {
-    width: 30%;
+.register-background {
+    background-size: cover;
+    background-image: url("../images/register-bg.jpg");
+    padding: 20px;
 }
 
 .centered-content {
     width: 40%;
     margin: auto;
+}
+
+#filters {
+    display: none;
 }
 
 .results {
@@ -112,7 +122,7 @@ body {
     border: 1px solid #000000;
     background-color: #2B7A78;
     text-align: justify;
-    padding: 20px 0 20px 0;
+    padding: 20px 0 0 0;
     margin-bottom: 20px;
     -webkit-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
@@ -121,9 +131,14 @@ body {
 
     .result p {
         background-color: #032322;
-        font-size: 15px;
+        font-size: 20px;
         font-weight: 500;
         padding: 0 20px 0 20px;
+        margin: 0;
+    }
+
+    .result button {
+        float: right;
     }
 
 .dialog-box {
@@ -143,4 +158,35 @@ body {
     display: table;
     margin: auto;
     font-size: 3rem;
+}
+
+.padded-content {
+    padding: 20px;
+}
+
+.thumbnail {
+    float: left;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 20px 0 0;
+    overflow: hidden;
+    -webkit-box-shadow: 2px 2px 12px -1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 2px 12px -1px rgba(0,0,0,0.75);
+    box-shadow: 2px 2px 12px -1px rgba(0,0,0,0.75);
+}
+
+    .thumbnail img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 100%;
+        width: auto;
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+    }
+
+.description {
+    float: left;
 }

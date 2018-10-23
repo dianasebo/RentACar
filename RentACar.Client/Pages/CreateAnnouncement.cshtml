@@ -7,48 +7,89 @@
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 @inject Blazor.Extensions.Storage.SessionStorage SessionStorage
 
-<div class="field-container create-page-background">
-    <div class="form-group">
-        <label for="brand" class="control-label">Brand: </label>
-        <input for="brand" bind="@Car.Brand" type="text" class="form-control format" />
-    </div>
-    <div class="form-group">
-        <label for="model" class="control-label">Model: </label>
-        <input for="model" bind="@Car.Model" type="text" class="form-control format" />
-    </div>
-    <div class="form-group">
-        <label for="year" class="control-label">Year: </label>
-        <input for="year" bind="@Car.Year" type="number" class="form-control format" />
-    </div>
-    <div class="form-group">
-        <label for="engine" class="control-label">Engine: </label>
-        <select class="form-control format" onchange="@OnEngineSelect">
-            <option value="">-- Select Engine Type --</option>
-            @foreach (var engineType in Enum.GetValues(typeof(EngineType)))
-            {
+<div class="create-page-background">
+
+    <div class="field-container">
+
+        <div class="form-group">
+            <label for="brand" class="control-label"> Brand: </label>
+            <input name="brand" bind="@Car.Brand" type="text" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="model" class="control-label"> Model: </label>
+            <input name="model" bind="@Car.Model" type="text" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="year" class="control-label"> Year: </label>
+            <input name="year" bind="@Car.Year" type="number" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="engine" class="control-label"> Engine: </label>
+            <select class="form-control" onchange="@OnEngineSelect">
+                <option value="">- Select Engine -</option>
+                @foreach (var engineType in Enum.GetValues(typeof(EngineType)))
+                {
                 <option value="@engineType">@engineType</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="seats" class="control-label">Seat count: </label>
-        <input for="seats" bind="@Car.Seats" type="number" class="form-control format" />
-    </div>
+                }
+            </select>
+        </div>
 
-    <input type="file" onchange="@UploadFile" id="getFileData" />
+        <div class="form-group">
+            <label for="seats" class="control-label"> Seat count: </label>
+            <input name="seats" bind="@Car.Seats" type="number" class="form-control" />
+        </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-default" onclick="@CreateCar">Save</button>
-        <button class="btn" onclick="@Cancel">Cancel</button>
-    </div>
-    @if (!Success)
-    {
+        @if (!Success)
+        {
         <div style="color: red">There was an error</div>
-    }
-    else if (Count > 0)
-    {
+        }
+        else if (Count > 0)
+        {
         <div style="color: green">@Count car(s) added to you collection</div>
-    }
+        }
+
+    </div>
+
+    <div class="field-container">
+
+        <div class="form-group">
+            <label for="transmission" class="control-label"> Transmission: </label>
+            <select class="form-control" onchange="@OnTransmissionSelect">
+                <option value="">- Select Transmission -</option>
+                @foreach (TransmissionType transmission in Enum.GetValues(typeof(TransmissionType)))
+                {
+                    <option value="@transmission">@transmission.GetName()</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="price" class="control-label"> Price/day (&euro;): </label>
+            <input name="price" type="number" class="form-control" bind="@Car.Price" />
+        </div>
+
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="ac" bind="@Car.Ac" checked />
+            <label class="custom-control-label" for="ac">AC</label>
+        </div>
+
+        <div class="form-group">
+            <label for="images" class="control-label"> Images: </label>
+            <input id="image" name="images" type="file" class="form-control" onchange="@UploadFile" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn" onclick="@CreateCar">Save</button>
+            <button class="btn" onclick="@Cancel">Cancel</button>
+        </div>
+
+    </div>
+
+    <div class="clear-float"></div>
+
 </div>
 
 @functions
@@ -61,7 +102,7 @@
 
     protected override async Task OnInitAsync()
     {
-        var token = await SessionStorage.GetItem<string> ("token");
+        var token = await SessionStorage.GetItem<string>("token");
         Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
@@ -73,18 +114,19 @@
             if (carId != 0)
                 foreach (var picture in Pictures)
                     await Http.PostAsync($"/api/Cars/{carId}/AddPicture", picture);
+            Pictures.Clear();
         }
         catch
         {
             Success = false;
         }
         Count++;
-            
+
     }
 
     async Task UploadFile()
     {
-        var data = await JsInterop.GetFileData("getFileData");
+        var data = await JsInterop.GetFileData("image");
         Pictures.Add(new ByteArrayContent(Convert.FromBase64String(data)));
     }
 
@@ -94,9 +136,15 @@
         Enum.TryParse(engineChangeEvent.Value.ToString(), out engine);
         Car.Engine = engine;
     }
+    protected void OnTransmissionSelect(UIChangeEventArgs transmissionChangeEvent)
+    {
+        TransmissionType transmission;
+        Enum.TryParse(transmissionChangeEvent.Value.ToString(), out transmission);
+        Car.Transmission = transmission;
+    }
 
     protected void Cancel()
     {
-        UriHelper.NavigateTo("/");
+        UriHelper.NavigateTo("/index");
     }
 }

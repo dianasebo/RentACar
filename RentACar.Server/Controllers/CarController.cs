@@ -50,6 +50,9 @@ namespace RentACar.Server.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/Cars/Random/{count}")]
+        public IEnumerable<Car> GetSomeCars(int count) => carDAO.GetRandomCars(count);
 
         //---------- functions used for initialization ----------
 
@@ -94,7 +97,7 @@ namespace RentACar.Server.Controllers
             cars = !string.IsNullOrEmpty(UserInput.Model) ? cars.Where(c => c.Model.Equals(UserInput.Model)) : cars;
             cars = UserInput.Engine != null ? cars.Where(c => c.Engine.Equals(UserInput.Engine)) : cars;
             cars = UserInput.Year != null ? cars.Where(c => c.Year.Equals(UserInput.Year)) : cars;
-
+            //TODO: search by ac && price
             return cars;
         }
     }

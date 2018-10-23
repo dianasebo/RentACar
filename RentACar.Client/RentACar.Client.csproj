@@ -30,8 +30,11 @@
     <Content Update="Pages\CreateAnnouncement.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\RentalAnnouncements.cshtml">
+    <Content Update="Pages\SearchAnnouncement.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\js\site.js" />
   </ItemGroup>
 </Project>

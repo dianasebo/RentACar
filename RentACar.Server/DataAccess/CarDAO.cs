@@ -51,6 +51,13 @@ namespace RentACar.Server.DataAccess
                                                  .First());
         }
 
+        public IEnumerable<Car> GetRandomCars(int count)
+        {
+            return TryDatabaseQuery(() => db.Cars.AsEnumerable()
+                                                 .OrderBy(c => Guid.NewGuid())
+                                                 .Take(count));
+        }
+
         public string GetRandomModelForBrand (string brand) 
         {    
             return TryDatabaseQuery(() => {

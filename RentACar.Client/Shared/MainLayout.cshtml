@@ -3,7 +3,7 @@
 
 <div class="header">
     <div class="logo">
-        <a href="/">
+        <a href="/index">
             @PageTitle
         </a>
     </div>
@@ -29,7 +29,7 @@
     {
         string currentPage = newLocation.Split('/').LastOrDefault();
         PageTitle = "RentACar";
-        if (!string.IsNullOrEmpty(currentPage))
+        if (!string.IsNullOrEmpty(currentPage) && !currentPage.Equals("index"))
             PageTitle += $"/{currentPage}";
         this.StateHasChanged();
     }

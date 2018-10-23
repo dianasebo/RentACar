@@ -1,0 +1,139 @@
+﻿@page "/search"
+@using RentACar.Shared.Models
+@using System.Net.Http.Headers
+@inject HttpClient Http
+@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+
+<div id="filters" class="search-page-background">
+    <div class="field-container">
+
+        <div class="form-group">
+            <label for="brand"> Brand: </label>
+            <input type="text" name="brand" class="form-control format" bind="@UserInput.Brand" />
+        </div>
+
+        <div class="form-group">
+            <label for="model"> Model: </label>
+            <input type="text" name="model" class="form-control format" bind="@UserInput.Model" />
+        </div>
+
+        <div class="form-group">
+            <label for="engine" class="control-label">Engine: </label>
+            <select class="form-control format" onchange="@OnEngineSelect">
+                <option value="">-- Select Engine Type --</option>
+                @foreach (var engineType in Enum.GetValues(typeof(EngineType)))
+                {
+                    <option value="@engineType">@engineType</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="year"> Year: </label>
+            <input type="text" name="year" class="form-control format" bind="@UserInput.Year" />
+        </div>
+
+        <div class="form-group">
+            <label for="city"> City: </label>
+            <input type="text" name="city" class="form-control format" bind="@UserInput.City" />
+        </div>
+
+        <div class="form-group">
+            <label for="from"> From: </label>
+            <input type="date" name="from" class="form-control format" bind="@UserInput.From" format-value="yyyy-MM-dd" value="" />
+
+            <label for="to"> To: </label>
+            <input type="date" name="from" class="form-control format" bind="@UserInput.To" format-value="yyyy-MM-dd" value="" />
+        </div>
+
+
+        <div class="form-group">
+            <button type="button" class="btn" onclick="@Search">Search</button>
+            <button class="btn" onclick="">Cancel</button>
+        </div>
+
+    </div>
+
+    <div class="clear-float"></div>
+
+</div>
+
+<button onclick="@ToggleFilters" id="toggle" type="button" class="btn btn-lg btn-block">Filter search</button>
+
+<div class="results">
+
+    @if (ListOfResultedCars != null)
+    { 
+        @foreach (Car car in ListOfResultedCars)
+        {
+            <article class="result">
+
+                <p> @car.Brand @car.Model </p>
+
+                <div class="padded-content">
+
+                    <div class="thumbnail">
+                        <img src=@($"api/Cars/{car.CarId}/Picture") />
+                    </div>
+
+                    <ul class="description">
+                        <li> Year: @car.Year </li>
+                        <li> Engine type: @car.Engine </li>
+                        <li> Transmission type: @car.Transmission </li>
+                        <li> Number of seats: @car.Seats </li>
+                        <li> Price/day: @car.Price &euro;</li>
+                    </ul>
+
+                    <div class="clear-float"></div>
+
+                    <button class="btn"> View deal <span class="oi oi-arrow-right"></span> </button>
+
+                    <div class="clear-float"></div>
+
+                </div>
+
+            </article>
+        }
+    }
+</div>
+
+@functions
+{
+    UserInput UserInput { get; set; } = new UserInput();
+    IEnumerable<Car> ListOfResultedCars { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        ListOfResultedCars = await Http.GetJsonAsync<IEnumerable<Car>>("api/Cars/Random/5");
+    }
+
+    protected async void ToggleFilters()
+    {
+        await JsInterop.ToggleFilters();
+    }
+
+    protected void OnEngineSelect(UIChangeEventArgs engineChangeEvent)
+    {
+        EngineType engine;
+        if (Enum.TryParse<EngineType>(engineChangeEvent.Value.ToString(), out engine))
+            UserInput.Engine = engine;
+        else
+            UserInput.Engine = null;
+    }
+
+    protected async void Search()
+    {
+        string token = await SessionStorage.GetItem<string>("token");
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        try
+        {
+            ListOfResultedCars = await Http.PostJsonAsync<IEnumerable<Car>>("api/Cars/Search", UserInput);
+        }
+        catch (Exception e)
+        {
+            UriHelper.NavigateTo("/login");
+        }
+        this.StateHasChanged();
+    }
+}

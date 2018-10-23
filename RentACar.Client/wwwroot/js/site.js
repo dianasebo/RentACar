@@ -15,7 +15,16 @@ const readUploadedFileAsText = (inputFile) => {
     });
 };
 
-getFileData = function (inputFile) {
+function getFileData(inputFile) {
     var expr = "#" + inputFile.replace(/"/g, '');
     return readUploadedFileAsText($(expr)[0]);
 };
+
+function toggleFilters() {
+    var filters = document.getElementById("filters");
+    if (filters.style.display === "none") {
+        filters.style.display = "block";
+    } else {
+        filters.style.display = "none";
+    }
+}

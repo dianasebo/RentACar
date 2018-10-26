@@ -1,8 +1,5 @@
 ﻿@page "/login"
-@using RentACar.Shared.Models
-@inject HttpClient Http
-@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
-@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+@inherits LoginBase
 
 <div class="login-page-background">
 
@@ -10,15 +7,15 @@
 
         <div class="form-group">
             <label for="email" class="control-label">Email: </label>
-            <input required for="email" bind="@loginRequest.Email" type="email" class="form-control" />
+            <input required for="email" bind="@LoginRequest.Email" type="email" class="form-control" />
         </div>
 
         <div class="form-group">
             <label for="password" class="control-label">Password: </label>
-            <input required for="password" bind="@loginRequest.Password" type="password" class="form-control" />
+            <input required for="password" bind="@LoginRequest.Password" type="password" class="form-control" />
         </div>
 
-        @if (!CorrectInfo)
+        @if (InvalidAttempt)
         {
             <div class="error"><em>Email or password wrong</em></div>
         }
@@ -30,26 +27,3 @@
     </div>
 
 </div>
-@functions
-{
-    LoginRequest loginRequest { get; set; } = new LoginRequest();
-    bool CorrectInfo { get; set; } = true;
-
-    protected async void AttemptLogin()
-    {
-        var response = await Http.PostJsonAsync<LoginResponse>("api/Login", loginRequest);
-
-        if (response.IsSuccessful)
-        {
-            var tokenKey = "token";
-            var tokenValue = response.Token;
-            await SessionStorage.SetItem(tokenKey, tokenValue);
-            UriHelper.NavigateTo("/");
-        }
-        else
-        {
-            CorrectInfo = false;
-            this.StateHasChanged();
-        }
-    }
-}

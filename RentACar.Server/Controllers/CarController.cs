@@ -16,7 +16,6 @@ namespace RentACar.Server.Controllers
 {
     public class CarController : Controller
     {
-        private static int lastAddedCarId;
         CarDAO carDAO = new CarDAO();
         UserDAO userDAO = new UserDAO();
 
@@ -56,6 +55,7 @@ namespace RentACar.Server.Controllers
 
         //---------- functions used for initialization ----------
 
+        [Authorize(Roles="admin")]
         [HttpGet]
         [Route("api/Cars/{carId}/Picture")]
         public IActionResult GetPicture(int carId) {

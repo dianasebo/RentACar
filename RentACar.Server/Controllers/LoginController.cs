@@ -65,14 +65,16 @@ namespace RentACar.Server.Controllers
             catch
             {
                 return new LoginResponse() { IsSuccessful = false };
-                
             }
-            var correctPassword = await userManager.CheckPasswordAsync(user, loginRequest.Password);
 
+            var correctPassword = await userManager.CheckPasswordAsync(user, loginRequest.Password);
             if (!correctPassword) 
                 return new LoginResponse() { IsSuccessful = false };
 
-            return new LoginResponse { Token = GenerateToken(loginRequest.Email) };
+            return new LoginResponse { 
+                Token = GenerateToken(loginRequest.Email), 
+                User = userDAO.GetUserByEmail(loginRequest.Email)
+            };
         }   
 
         private string GenerateToken (string email) => tokenService.BuildToken(email);

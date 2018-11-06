@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
 using Microsoft.JSInterop;
 
-namespace RentACar.Client
+namespace RentACar.Client.Services
 {
     public static class JsInterop
     {

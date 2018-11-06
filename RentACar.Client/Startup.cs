@@ -1,6 +1,7 @@
 using Blazor.Extensions.Storage;
 using Microsoft.AspNetCore.Blazor.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using RentACar.Client.Services;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace RentACar.Client
@@ -11,6 +12,7 @@ namespace RentACar.Client
         {
             services.AddStorage();
             services.AddLoadingBar();
+            services.AddSingleton<GlobalStateChange>();
         }
 
         public void Configure(IBlazorApplicationBuilder app)

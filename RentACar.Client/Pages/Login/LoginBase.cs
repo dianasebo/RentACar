@@ -5,6 +5,7 @@ using Blazor.Extensions.Storage;
 using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.AspNetCore.Blazor.Services;
+using RentACar.Client.Services;
 using RentACar.Shared.Models;
 
 namespace RentACar.Client.Pages
@@ -13,6 +14,7 @@ namespace RentACar.Client.Pages
     {
         [Inject] public HttpClient HttpClient { get; set; }
         [Inject] public IUriHelper UriHelper { get; set; }
+        [Inject] public GlobalStateChange GlobalStateChange { get; set; }
         [Inject] public SessionStorage SessionStorage { get; set; }
 
         public LoginRequest LoginRequest { get; set; } = new LoginRequest();
@@ -24,22 +26,30 @@ namespace RentACar.Client.Pages
 
             if (loginResponse.IsSuccessful) {
                 await SaveLoginToken(loginResponse);
+                await SaveCurrentUser(loginResponse);
+                GlobalStateChange.InvokeStateChange();
                 UriHelper.NavigateTo("/");
             }
             else
                 PromptInvalidAttempt();
         }
 
+        private async Task SaveCurrentUser(LoginResponse loginResponse) {
+            var itemKey = "currentUser";
+            var itemValue = loginResponse.User;
+            await SessionStorage.SetItem(itemKey, itemValue);
+        }
+
         private async Task SaveLoginToken (LoginResponse loginResponse) 
         {
-            var tokenKey = "token";
-            var tokenValue = loginResponse.Token;
-            await SessionStorage.SetItem(tokenKey, tokenValue);
+            var itemKey = "token";
+            var itemValue = loginResponse.Token;
+            await SessionStorage.SetItem(itemKey, itemValue);
         }
 
         private void PromptInvalidAttempt()
         {
-            InvalidAttempt = false;
+            InvalidAttempt = true;
             StateHasChanged();
         }
     }

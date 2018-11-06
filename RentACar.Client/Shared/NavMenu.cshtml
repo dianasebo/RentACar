@@ -1,4 +1,4 @@
-﻿@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+﻿@inherits NavMenuBase
 
 <ul class="menu">
 
@@ -23,24 +23,37 @@
         </NavLink>
     </li>
 
-    <li class="menu-item">
-        <NavLink ActiveClass="selected" href="register">
-            <span class="oi oi-person" aria-hidden="true"></span>
-            Register
-        </NavLink>
-    </li>
+    @if (CurrentUser == null)
+    {
+        <li class="menu-item">
+            <NavLink ActiveClass="selected" href="register">
+                <span class="oi oi-person" aria-hidden="true"></span>
+                Register
+            </NavLink>
+        </li>
 
-    <li class="menu-item">
-        <NavLink ActiveClass="selected" href="login">
-            <span class="oi oi-account-login" aria-hidden="true"></span>
-            Log in
-        </NavLink>
-    </li>
+        <li class="menu-item">
+            <NavLink ActiveClass="selected" href="login">
+                <span class="oi oi-account-login" aria-hidden="true"></span>
+                Log in
+            </NavLink>
+        </li>
+    }
+    else
+    {
+        <li class="menu-item">
+            <NavLink ActiveClass="selected" href="profile">
+                <span class="oi oi-person" aria-hidden="true"></span>
+                Profile
+            </NavLink>
+        </li>
+
+        <li class="menu-item">
+            <NavLink ActiveClass="selected" href="logout" >
+                <span class="oi oi-account-logout" aria-hidden="true"></span>
+                Logout
+            </NavLink>
+        </li>
+    }
     
-    <li class="menu-item">
-        <NavLink ActiveClass="selected" href="logout">
-            <span class="oi oi-account-logout" aria-hidden="true"></span>
-            Log out
-        </NavLink>
-    </li>
 </ul>

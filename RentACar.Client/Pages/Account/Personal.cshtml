@@ -1,0 +1,16 @@
+@page "/profile/personal"
+
+@using RentACar.Shared.Models
+
+
+This is the personal arrea for
+
+@if (User != null)
+{
+    @User.Email;
+}
+
+@functions
+{
+    [Parameter] User User { get; set; }
+}

@@ -1,5 +1,6 @@
 ﻿@page "/search"
 @using RentACar.Shared.Models
+@using RentACar.Client.Services
 @using System.Net.Http.Headers
 @inject HttpClient Http
 @inject Blazor.Extensions.Storage.SessionStorage SessionStorage
@@ -106,6 +107,8 @@
     protected override async Task OnInitAsync()
     {
         ListOfResultedCars = await Http.GetJsonAsync<IEnumerable<Car>>("api/Cars/Random/5");
+        var token = await SessionStorage.GetItem<string>("token");
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
     protected async void ToggleFilters()
@@ -132,6 +135,7 @@
         }
         catch (Exception e)
         {
+            System.Console.WriteLine(e);
             UriHelper.NavigateTo("/login");
         }
         this.StateHasChanged();

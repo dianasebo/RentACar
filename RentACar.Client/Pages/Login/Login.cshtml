@@ -21,7 +21,7 @@
         }
 
         <div class="form-group">
-            <button type="submit" class="btn" onclick="@AttemptLogin">Login</button>
+            <button type="submit" class="btn" onclick="@(async () => await AttemptLogin())">Login</button>
         </div>
 
     </div>

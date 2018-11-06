@@ -1,10 +1,5 @@
 ﻿@page "/register"
-@using RentACar.Shared.Models
-@using RentACar.Client
-@using System.Text
-
-@inject HttpClient Http
-@inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
+@inherits RegisterBase
 
 <div class="register-background">
 
@@ -13,107 +8,72 @@
         <p>Already have an account? <NavLink href="/login">Log in!</NavLink></p>
         <div class="form-group">
             <label for="lastname" class="control-label">Last name: </label>
-            <input required for="lastname" bind="@InputLastname" type="text" class="form-control" />
+            <input required for="lastname" bind="@RegistrationRequest.Lastname" type="text" class="form-control" />
         </div>
 
         <div class="form-group">
             <label for="firstname" class="control-label">First name: </label>
-            <input required for="firstname" bind="@InputFirstname" type="text" class="form-control" />
+            <input required for="firstname" bind="@RegistrationRequest.Firstname" type="text" class="form-control" />
         </div>
 
         <div class="form-group">
             <label for="email" class="control-label">Email: </label>
-            <input required for="email" bind="@InputEmail" type="email" class="form-control" />
+            <input required for="email" bind="@RegistrationRequest.Email" type="email" class="form-control" />
         </div>
         
-            @if (Errors != null)
+        @if (!ValidEmail)
+        {
+            <div><em style="color: red">@RegistrationRequest.Email is not a valid email address.</em></div>
+        }
+        @if (Errors != null)
+        {
+            @foreach (var error in Errors["email"])
             {
-                @foreach (var error in Errors["email"])
-                {
-                    <div><em style="color: red">@error</em></div>
-                }
-                @foreach (var error in Errors["username"])
-                {
-                    <div><em style="color: red">@error</em></div>
-                }
+                <div><em style="color: red">@error</em></div>
             }
+            @foreach (var error in Errors["username"])
+            {
+                <div><em style="color: red">@error</em></div>
+            }
+        }
 
-            <div class="form-group">
-                <label for="password" class="control-label">Password: </label>
-                <input required for="password" bind="@InputPassword" type="password" class="form-control"/>
-            </div>
+        <div class="form-group">
+            <label for="password" class="control-label">Password: </label>
+            <input required for="password" bind="@RegistrationRequest.Password" type="password" class="form-control"/>
+        </div>
 
         <div class="form-group">
             <label for="confirmpassword" class="control-label">Confirm Password: </label>
-            <input required for="confirmpassword" bind="@InputConfirmPassword" type="password" class="form-control" />
+            <input required for="confirmpassword" bind="@ConfirmPassword" type="password" class="form-control" />
         </div>
 
-            @if (Errors != null)
+        @if (!PasswordsMatch)
+        {
+            <div><em style="color: red">Passwords do not match!</em></div>
+        }
+        @if (Errors != null)
+        {
+            @foreach (var error in Errors["password"])
             {
-                @foreach (var error in Errors["password"])
-                {
-                    <div><em style="color: red">@error</em></div>
-                }
+                <div><em style="color: red">@error</em></div>
             }
+        }
 
         <div class="form-group">
             <label for="city" class="control-label">City: </label>
-            <input for="city" bind="@InputCity" type="text" class="form-control" />
+            <input for="city" bind="@RegistrationRequest.City" type="text" class="form-control" />
         </div>
 
         <div class="form-group">
             <label for="address" class="control-label">Address: </label>
-            <input for="address" bind="@InputAddress" type="text" class="form-control" />
+            <input for="address" bind="@RegistrationRequest.Address" type="text" class="form-control" />
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn" onclick="@RegisterUser">Register</button>
+            <button type="submit" class="btn" onclick="@(async () => await RegisterUser())">Register</button>
             <button class="btn" onclick="@Cancel">Cancel</button>
         </div>
 
     </div>
 
 </div>
-
-@functions
-{
-    string InputLastname { get; set; }
-    string InputFirstname { get; set; }
-    string InputEmail { get; set; }
-    string InputPassword { get; set; }
-    string InputConfirmPassword { get; set; }
-    string InputCity { get; set; }
-    string InputAddress { get; set; }
-    public Dictionary<string, IEnumerable<string>> Errors { get; set; }
-
-    protected async void RegisterUser()
-    {
-        if (InputPassword.Equals(InputConfirmPassword))
-        {
-            var request = new RegistrationRequest()
-            {
-                Lastname = InputLastname,
-                Firstname = InputFirstname,
-                Email = InputEmail,
-                Password = InputPassword,
-                City = InputCity,
-                Address = InputAddress
-            };
-            Console.WriteLine("sending the request");
-            var response = await Http.PostJsonAsync<RegistrationResponse>("api/Registration", request);
-            Console.WriteLine("sent the request");
-            if (response.IsSuccessful)
-                UriHelper.NavigateTo("/success");
-            else
-            {
-                Errors = response.Errors;
-                this.StateHasChanged();
-            }
-        }
-    }
-
-    protected void Cancel()
-    {
-        UriHelper.NavigateTo("/index");
-    }
-}

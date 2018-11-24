@@ -3,12 +3,42 @@
 @using RentACar.Shared.Models
 
 
-This is the personal arrea for
+<div class="centered-content dialog-box">
+    <div class="row justify-content-md-center">Here you can find your personal information.</div>
+    <div class="row">
+        <div class="col-sm">
+            <label for="city" class="control-label">City: </label>
+        </div>  
+        @if(User != null) 
+        {
+            <div class="col-sm">
+                <output for="city">@User.City</output>
+            </div>
+            <div style="float: right" class="col-sm">
+                <a>Edit</a>
+            </div>
+            <div style="float: none"></div>
+        }
+    </div>
 
-@if (User != null)
-{
-    @User.Email;
-}
+    <div class="row">
+        <div class="col-sm">
+            <label for="city" class="control-label">Address: </label>
+        </div>  
+        @if(User != null) 
+        {
+            <div class="col-sm">
+                <output for="city">@User.Address</output>
+            </div>
+            <div style="float: right" class="col-sm">
+                <a>Edit</a>
+            </div>
+            <div style="float: none"></div>
+
+        }
+    </div>
+
+</div>
 
 @functions
 {

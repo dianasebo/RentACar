@@ -13,11 +13,10 @@ namespace RentACar.Client.Pages
         [Inject] public SessionStorage SessionStorage { get; set; }        
         [Inject] public IUriHelper UriHelper { get; set; }
         public User CurrentUser { get; set; }
-        public string SelectedPage { get; set; }
+        public string SelectedPage { get; set; } = "personal";
         protected override async Task OnInitAsync() 
         {
             CurrentUser = await SessionStorage.GetItem<User>("currentUser");
-            System.Console.WriteLine(CurrentUser);
             if (CurrentUser == null)
                 UriHelper.NavigateTo("/login");
         }

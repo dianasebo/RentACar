@@ -3,7 +3,6 @@
     float: left;
     border-top: 1px solid black;
     background-color: #174241;
-    padding-left: 20px;
     padding-top: 25px;
     width: 250px;
     height: 100vh;
@@ -11,6 +10,12 @@
     top: 0;
 }
 
+.nav-item a {
+    width: 100%;
+}
+.nav-item a:hover {
+    background: #2B7A78;
+}
 body {
     background-color: #17252A;
     color: #FFFFFF;

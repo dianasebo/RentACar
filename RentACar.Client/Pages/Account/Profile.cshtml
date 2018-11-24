@@ -1,37 +1,54 @@
 @page "/profile"
 @inherits ProfileBase
 
+@using RentACar.Shared.Models
+
 <div class="sidebar">
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link" >
+            <a class="btn" >
                 <div onclick="@(() => SelectedPage = "personal")">Personal Info</div>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" >
+            <a class="btn" >
                 <div onclick="@(() => SelectedPage = "announcements")">My announcements</div>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" >My rentals</a>
+            <a class="btn" >
+                <div onclick="@(() => SelectedPage = "rentals")">My rentals</div>
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" >Account</a>
+            <a class="btn" >
+                <div onclick="@(() => SelectedPage = "account")">Account</div>
+            </a>
         </li>
     </ul>
 </div>
 
-@if ("personal".Equals(SelectedPage)) 
+@if (SelectedPage.Equals("personal")) 
 {
     <Personal User="@CurrentUser">
+
     </Personal>
 } 
-else if ("announcements".Equals(SelectedPage))
+else if (SelectedPage.Equals("announcements"))
 {
-    <p>nada qua</p>
+    <MyAnnouncements User="@CurrentUser">
+
+    </MyAnnouncements>
 }
-else
+else if (SelectedPage.Equals("rentals"))
 {
-    <p>you selected nothing</p>
+    <MyRentals User="@CurrentUser">
+
+    </MyRentals>
+}
+else if (SelectedPage.Equals("account"))
+{
+    <Account User="@CurrentUser">
+
+    </Account>
 }

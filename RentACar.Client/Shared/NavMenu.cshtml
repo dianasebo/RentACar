@@ -1,7 +1,6 @@
 ﻿@inherits NavMenuBase
 
-<ul class="menu">
-
+<ul class="menu app-menu">
     <li class="menu-item">
         <NavLink ActiveClass="selected" href="index">
             <span class="oi oi-home" aria-hidden="true"></span>
@@ -15,13 +14,18 @@
             Search announcements
         </NavLink>
     </li>
+    @if (CurrentUser != null)
+    {
+        <li class="menu-item">
+            <NavLink ActiveClass="selected" href="create">
+                <span class="oi oi-plus" aria-hidden="true"></span>
+                Create announcement
+            </NavLink>
+        </li>
+    }
+</ul>
 
-    <li class="menu-item">
-        <NavLink ActiveClass="selected" href="create">
-            <span class="oi oi-plus" aria-hidden="true"></span>
-            Create announcement
-        </NavLink>
-    </li>
+<ul class="menu user-menu">
 
     @if (CurrentUser == null)
     {
@@ -57,3 +61,5 @@
     }
     
 </ul>
+
+<div class="clear-float"></div>

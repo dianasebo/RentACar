@@ -17,9 +17,11 @@ namespace RentACar.Client.Shared
 
         public User CurrentUser { get; set; }
 
-        protected override void OnInit()
+        protected async override Task OnInitAsync()
         {
             GlobalStateChange.StateHasChanged += UserLoggedIn;
+            CurrentUser = await SessionStorage.GetItem<User>("currentUser");
+            StateHasChanged();
         }
 
         private async void UserLoggedIn(object sender, EventArgs e) {

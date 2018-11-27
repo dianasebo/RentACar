@@ -106,9 +106,9 @@
 
     protected override async Task OnInitAsync()
     {
-        ListOfResultedCars = await Http.GetJsonAsync<IEnumerable<Car>>("api/Cars/Random/5");
         var token = await SessionStorage.GetItem<string>("token");
         Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        ListOfResultedCars = await Http.GetJsonAsync<IEnumerable<Car>>("api/Cars/Random/5");
     }
 
     protected async void ToggleFilters()
@@ -127,8 +127,7 @@
 
     protected async void Search()
     {
-        string token = await SessionStorage.GetItem<string>("token");
-        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         try
         {
             ListOfResultedCars = await Http.PostJsonAsync<IEnumerable<Car>>("api/Cars/Search", UserInput);

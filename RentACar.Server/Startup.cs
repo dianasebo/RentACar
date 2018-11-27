@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RentACar.Server.DataAccess;
 using RentACar.Server.Services;
+using RentACar.Shared.Models;
 using System;
 using System.Linq;
 using System.Net.Mime;
@@ -33,12 +34,6 @@ namespace RentACar.Server
         {
             services.AddDbContext<RentACarContext>();
 
-            services.AddMvc();
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<RentACarContext>();
-
-
-
             services.AddResponseCompression(options =>
                     {
                         options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
@@ -52,6 +47,7 @@ namespace RentACar.Server
 
             services.AddAuthentication(options => 
                     {
+                        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     })
@@ -69,6 +65,23 @@ namespace RentACar.Server
                         };
                     });
 
+            IdentityBuilder builder = services.AddIdentityCore<IdentityUser>(options =>
+                    {
+                        options.Password.RequireDigit = true;
+                        options.Password.RequiredLength = 8;
+                        options.Password.RequireNonAlphanumeric = true;
+                        options.Password.RequireUppercase = true;
+                        options.Password.RequireLowercase = true;
+                    });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+
+            builder.AddEntityFrameworkStores<RentACarContext>();
+            builder.AddRoleValidator<RoleValidator<IdentityRole>>();
+            builder.AddRoleManager<RoleManager<IdentityRole>>();
+
+            services.AddMvc();
+
             services.ConfigureApplicationCookie(options =>
                     {
                         options.AccessDeniedPath = "/denied";
@@ -82,12 +95,13 @@ namespace RentACar.Server
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<RentACarContext>();
                 context.Database.EnsureCreated();
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-                CreateRoles(roleManager).Wait();
-                CreateAdmin(userManager).Wait();
-
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                
+                new AdminBuilder(context, userManager, roleManager).build();
             }
+
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
@@ -101,30 +115,8 @@ namespace RentACar.Server
                     {
                         routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
                     });
+
             app.UseBlazor<Client.Program>();
-        }
-
-        private async Task CreateAdmin (UserManager<IdentityUser> userManager) 
-        {
-            var adminUser = await userManager.FindByEmailAsync("admin@rentacar.ro");
-            if (adminUser == null) 
-            {
-                await userManager.CreateAsync(new IdentityUser()
-                {
-                    UserName = "admin@rentacar.ro",
-                    Email = "admin@rentacar.ro"
-                }, "Admin1234!");
-                adminUser = await userManager.FindByEmailAsync("admin@rentacar.ro");
-            }
-            if (!(await userManager.GetRolesAsync(adminUser)).Contains("admin"))
-                await userManager.AddToRoleAsync(adminUser, "admin");
-        }
-
-        private async Task CreateRoles (RoleManager<IdentityRole> roleManager) 
-        {
-            var adminRoleExists = await roleManager.RoleExistsAsync("admin");
-            if (!adminRoleExists)
-                await roleManager.CreateAsync(new IdentityRole("admin"));
         }
     }
 }

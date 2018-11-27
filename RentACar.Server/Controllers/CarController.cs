@@ -55,10 +55,10 @@ namespace RentACar.Server.Controllers
 
         //---------- functions used for initialization ----------
 
-        [Authorize(Roles="admin")]
         [HttpGet]
         [Route("api/Cars/{carId}/Picture")]
-        public IActionResult GetPicture(int carId) {
+        public IActionResult GetPicture(int carId) 
+        {
             return File(carDAO.GetPictureForCar(carId), "image/jpeg");
         }
 

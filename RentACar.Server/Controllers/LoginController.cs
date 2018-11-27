@@ -72,11 +72,11 @@ namespace RentACar.Server.Controllers
                 return new LoginResponse() { IsSuccessful = false };
 
             return new LoginResponse { 
-                Token = GenerateToken(loginRequest.Email), 
+                Token = await GenerateToken(user), 
                 User = userDAO.GetUserByEmail(loginRequest.Email)
             };
         }   
 
-        private string GenerateToken (string email) => tokenService.BuildToken(email);
+        private async Task<string> GenerateToken (IdentityUser user) => await tokenService.BuildToken(user);
     }
 }

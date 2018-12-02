@@ -2,9 +2,8 @@ using System.Collections.Generic;
 
 namespace RentACar.Shared.Models 
 {
-    public class RegistrationResponse 
+    public class RegistrationResponse : GenericResponse
     {
-        public bool IsSuccessful { get; set; }
         public Dictionary<string, IEnumerable<string>> Errors { get; set; }
     }
 }

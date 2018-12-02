@@ -45,6 +45,15 @@
         }
         else
         {
+            if (CurrentUser.IsAdmin)
+            {
+                <li class="menu-item">
+                    <NavLink ActiveClass="selected" href="management">
+                        <span class="oi oi-cog" aria-hidden="true"></span>
+                        Management
+                    </NavLink>
+                </li>
+            }
             <li class="menu-item">
                 <NavLink ActiveClass="selected" href="profile">
                     <span class="oi oi-person" aria-hidden="true"></span>

@@ -30,6 +30,9 @@
     <Content Update="Pages\CreateAnnouncement.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Management.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\SearchAnnouncement.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

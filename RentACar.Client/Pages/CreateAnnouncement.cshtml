@@ -1,6 +1,7 @@
 @page "/create"
 @using System
 @using System.Text
+@using System.Linq
 @using RentACar.Shared.Models
 @using RentACar.Client.Services
 @using System.Net.Http.Headers
@@ -78,12 +79,26 @@
         </div>
 
         <div class="form-group">
-            <label for="images" class="control-label"> Images: </label>
-            <input id="image" name="images" type="file" class="form-control" onchange="@UploadFile" />
+            <label for="images" class="control-label"> Images (up to 10 pictures, up to 1MB each): </label>
+            <input id="upload" name="images" type="file" class="form-control" onchange="@(async () => await UploadPictures())" multiple accept=".jpg, .jpeg, .png" />
         </div>
 
+        @if (DisplayPopup)
+        {
+            <div class="alert alert-primary" role="alert">
+                Please wait while your pictures are being uploaded!
+            </div>
+        }
+        @if (Pictures != null) 
+        {
+            <div class="alert alert-secondary" role="alert">
+                @Pictures.Count() pictures have been successfuly uploaded.
+            </div>
+        }
+
+
         <div class="form-group">
-            <button type="submit" class="btn" onclick="@CreateCar">Save</button>
+            <button type="submit" class="btn" onclick="@(async () => await CreateCar())">Save</button>
             <button class="btn" onclick="@Cancel">Cancel</button>
         </div>
 
@@ -96,10 +111,11 @@
 @functions
 {
 
-    public List<ByteArrayContent> Pictures { get; set; } = new List<ByteArrayContent>();
+    public IEnumerable<string> Pictures { get; set; }
     public Car Car { get; set; } = new Car();
     public int Count { get; set; }
     public bool Success { get; set; } = true;
+    public bool DisplayPopup { get; set; } = false;
 
     protected override async Task OnInitAsync()
     {
@@ -109,26 +125,32 @@
 
     protected async Task CreateCar()
     {
-        try
+        var currentUser = await SessionStorage.GetItem<User>("currentUser");
+        Car.UserID = currentUser.UserId;
+
+        var createCarRequest = new CreateCarRequest
+                                {
+                                    Car = Car,
+                                    Pictures = Pictures
+                                };
+        var response = await Http.PostJsonAsync<GenericResponse>("api/Cars/Create", createCarRequest);
+
+        if (response.IsSuccessful)
         {
-            int carId = await Http.PostJsonAsync<int>("api/Cars/Create", Car);
-            if (carId != 0)
-                foreach (var picture in Pictures)
-                    await Http.PostAsync($"/api/Cars/{carId}/AddPicture", picture);
-            Pictures.Clear();
-        }
-        catch
+            Pictures = Enumerable.Empty<string>();
+            Success = true;
+            Count++;
+        } 
+        else 
         {
             Success = false;
+            Count = 0;
         }
-        Count++;
-
     }
 
-    async Task UploadFile()
+    protected async Task UploadPictures()
     {
-        var data = await JsInterop.GetFileData("image");
-        Pictures.Add(new ByteArrayContent(Convert.FromBase64String(data)));
+        Pictures = await JsInterop.GetPicturesAsStrings("upload");
     }
 
     protected void OnEngineSelect(UIChangeEventArgs engineChangeEvent)
@@ -137,6 +159,7 @@
         Enum.TryParse(engineChangeEvent.Value.ToString(), out engine);
         Car.Engine = engine;
     }
+
     protected void OnTransmissionSelect(UIChangeEventArgs transmissionChangeEvent)
     {
         TransmissionType transmission;

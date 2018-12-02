@@ -22,31 +22,19 @@ namespace RentACar.Server.Controllers
         [Authorize]
         [HttpPost]
         [Route ("api/Cars/Create")]
-        public int Create([FromBody] Car car)
-        {
-            string email = User.FindFirst(ClaimTypes.Email).Value;
-            User user = userDAO.GetUserByEmail(email);
-            car.UserID = user.UserId;
-            if (ModelState.IsValid)
-                return carDAO.AddCar(car);
-            return 0;
-        }
+        public GenericResponse Create([FromBody] CreateCarRequest createCarRequest) {
+            if (!ModelState.IsValid)
+                return new GenericResponse { IsSuccessful = false };
 
-        [Authorize]
-        [HttpPost]
-        [Route ("api/Cars/{carId}/AddPicture")]
-        public void AddPicture(int carId)
-        {
-            if (ModelState.IsValid) {
-                var memoryStream = new MemoryStream();
-                Request.Body.CopyToAsync(memoryStream);
-                var carPicture = new CarPicture()
-                { 
-                    CarId = carId,
-                    Picture = memoryStream.ToArray()
-                };
-                carDAO.AddCarPicture(carPicture);
-            }
+            Car car = createCarRequest.Car;
+            carDAO.AddCar (car);
+            foreach (var picture in createCarRequest.Pictures)
+                carDAO.AddCarPicture(new CarPicture 
+                {
+                    CarId = car.CarId,
+                    Picture = Convert.FromBase64String(picture)
+                });
+            return new GenericResponse();
         }
 
         [HttpGet]
@@ -56,10 +44,24 @@ namespace RentACar.Server.Controllers
         //---------- functions used for initialization ----------
 
         [HttpGet]
-        [Route("api/Cars/{carId}/Picture")]
+        [Route("api/Cars/{carId}/Pictures")]
         public IActionResult GetPicture(int carId) 
         {
             return File(carDAO.GetPictureForCar(carId), "image/jpeg");
+        }
+
+
+        [HttpGet]
+        [Route("api/Cars/{carId}/Pictures/{pictureId}")]
+        public IActionResult GetPictureByIdForCar(int carId, int pictureId) 
+        {
+            try {
+                return File(carDAO.GetPictureByIdForCar(carId, pictureId), "image/jpeg");
+            } 
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet]

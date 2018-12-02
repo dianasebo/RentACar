@@ -1,23 +1,32 @@
-const readUploadedFileAsText = (inputFile) => {
-    const temporaryFileReader = new FileReader();
-    return new Promise((resolve, reject) => {
-        temporaryFileReader.onerror = () => {
-            temporaryFileReader.abort();
-            reject(new DOMException("Problem parsing input file."));
-        };
-        temporaryFileReader.addEventListener("load", function () {
-            var data = {
-                content: temporaryFileReader.result.split(',')[1]
-            };
-            resolve(data);
-        }, false);
-        temporaryFileReader.readAsDataURL(inputFile.files[0]);
-    });
+// const readUploadedFileAsText = async (inputFile) => {
+    
+async function readUploadedFilesAsText(inputFile) {
+    var pictureList = inputFile.files;
+    var pictures = [];
+    for (var i = 0; i < pictureList.length && pictures.length < 10; i++) {
+        if (pictureList[i].size < 1024 * 1024) {
+            const temporaryFileReader = new FileReader();
+            pictures.push(await new Promise((resolve, reject) => {
+                temporaryFileReader.onerror = () => {
+                    temporaryFileReader.abort();
+                    reject(new DOMException("Problem parsing input file."));
+                };
+                temporaryFileReader.addEventListener("load", function () {
+                    var data = {
+                        content: temporaryFileReader.result.split(',')[1]
+                    };
+                    resolve(data);
+                }, false);
+                temporaryFileReader.readAsDataURL(pictureList[i]);
+            }));        
+        }
+    }
+    return pictures;
 };
 
-function getFileData(inputFile) {
+async function getPicturesData(inputFile) {
     var expr = "#" + inputFile.replace(/"/g, '');
-    return readUploadedFileAsText($(expr)[0]);
+    return await readUploadedFilesAsText($(expr)[0]);
 };
 
 function toggleFilters() {

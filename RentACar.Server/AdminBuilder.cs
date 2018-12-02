@@ -56,7 +56,8 @@ namespace RentACar.Server {
             {
                 Email = "admin@rentacar.ro",
                 Firstname = "",
-                Lastname = ""
+                Lastname = "",
+                IsAdmin = true
             };
             context.UserInfo.Add (user);
         }

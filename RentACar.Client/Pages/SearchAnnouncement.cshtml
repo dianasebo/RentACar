@@ -75,7 +75,7 @@
                 <div class="padded-content">
 
                     <div class="thumbnail">
-                        <img src=@($"api/Cars/{car.CarId}/Picture") />
+                        <img src=@($"api/Cars/{car.CarId}/Pictures") />
                     </div>
 
                     <ul class="description">
@@ -88,7 +88,7 @@
 
                     <div class="clear-float"></div>
 
-                    <button class="btn"> View deal <span class="oi oi-arrow-right"></span> </button>
+                    <button class="btn" data-toggle="modal" data-target="#announcement-modal" onclick="@(() => SetSelectedCar(car))"> View deal <span class="oi oi-arrow-right"></span> </button>
 
                     <div class="clear-float"></div>
 
@@ -99,10 +99,41 @@
     }
 </div>
 
+<div id="announcement-modal" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        @if (SelectedCar != null)
+        {
+            <div class="modal-header">
+                <h5 class="modal-title">@SelectedCar.Brand @SelectedCar.Model</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li> Year: @SelectedCar.Year </li>
+                    <li> Engine type: @SelectedCar.Engine </li>
+                    <li> Transmission type: @SelectedCar.Transmission </li>
+                    <li> Number of seats: @SelectedCar.Seats </li>
+                    <li> Price/day: @SelectedCar.Price &euro;</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn">Contact owner</button>
+            </div>
+        }
+
+        </div>
+    </div>
+</div>
+
 @functions
 {
     UserInput UserInput { get; set; } = new UserInput();
     IEnumerable<Car> ListOfResultedCars { get; set; }
+    Car SelectedCar { get; set; }
 
     protected override async Task OnInitAsync()
     {
@@ -138,5 +169,10 @@
             UriHelper.NavigateTo("/login");
         }
         this.StateHasChanged();
+    }
+
+    private void SetSelectedCar(Car selectedCar)
+    {
+        SelectedCar = selectedCar;
     }
 }

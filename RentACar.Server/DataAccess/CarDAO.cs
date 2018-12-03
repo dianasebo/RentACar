@@ -25,13 +25,19 @@ namespace RentACar.Server.DataAccess
                 return car.Pictures.First().Picture;
             });
         }
-        
-        public int AddCar(Car car) 
-        {
+    
+        public byte[] GetPictureByIdForCar (int carId, int pictureId) {
             return TryDatabaseQuery(() => {
+                var car = db.Cars.Where(c => c.CarId == carId).Include(c => c.Pictures).Single();
+                return car.Pictures.Where(p => p.CarPictureId == pictureId).Single().Picture;
+            });
+        }
+
+        public void AddCar(Car car) 
+        {
+            TryDatabaseQuery(() => {
                 db.Cars.Add (car);
                 db.SaveChanges ();
-                return car.CarId;
             });
         }
 

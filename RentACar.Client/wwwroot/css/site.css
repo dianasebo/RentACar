@@ -144,11 +144,12 @@ body {
 }
 
 .result {
+    width: 65%;
+    margin: 0 auto 20px auto;
     border: 1px solid #000000;
     background-color: #2B7A78;
     text-align: justify;
     padding: 20px 0 0 0;
-    margin-bottom: 20px;
     -webkit-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
     box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
@@ -216,4 +217,8 @@ body {
 
 .description {
     float: left;
+}
+
+#announcement-modal {
+    color: #000000;
 }

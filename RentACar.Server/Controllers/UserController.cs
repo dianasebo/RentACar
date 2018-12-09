@@ -4,6 +4,7 @@ using RentACar.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentACar.Server.Controllers
 {
@@ -17,6 +18,7 @@ namespace RentACar.Server.Controllers
             this.userManager = userManager;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("api/Users/Index")]
         public IEnumerable<User> Index() => userDAO.GetAllUsers();
@@ -44,6 +46,7 @@ namespace RentACar.Server.Controllers
         //        userDAO.UpdateUser(user);
         //}
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("api/Users/Delete/{id}")]
         public async Task Delete(int id)

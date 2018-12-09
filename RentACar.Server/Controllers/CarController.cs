@@ -33,6 +33,7 @@ namespace RentACar.Server.Controllers
             return new GenericResponse();
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("api/Cars/Delete/{carId}")]
         public void DeleteCarById(int carId)

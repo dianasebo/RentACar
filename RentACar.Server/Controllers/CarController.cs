@@ -41,6 +41,11 @@ namespace RentACar.Server.Controllers
             carDAO.DeleteCarById(carId);
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("api/{userId}/Cars")]
+        public IEnumerable<Car> GetCarsForUser(int userId) => carDAO.GetCarsForUser(userId);
+
         [HttpGet]
         [Route("api/Cars/Random/{count}")]
         public IEnumerable<Car> GetSomeCars(int count) => carDAO.GetRandomCars(count);

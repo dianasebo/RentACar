@@ -1,0 +1,21 @@
+@page "/profile/garage"
+
+@using System.Net.Http.Headers
+@using RentACar.Shared.Models
+@inject HttpClient Http
+@inject Blazor.Extensions.Storage.SessionStorage SessionStorage
+
+<CarManagement Cars="@Cars"></CarManagement>
+
+@functions
+{
+    [Parameter] User User { get; set; }
+    IEnumerable<Car> Cars { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        var token = await SessionStorage.GetItem<string>("token");
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        Cars = await Http.GetJsonAsync<IEnumerable<Car>>($"api/{User.UserId}/Cars");
+    }
+}

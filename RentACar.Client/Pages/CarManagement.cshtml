@@ -1,0 +1,130 @@
+@using RentACar.Shared.Models
+@inject HttpClient Http
+
+<h3 class="management-section-title">Car management</h3>
+
+@if (Cars != null)
+{
+    <div class="car-management">
+        @foreach (Car car in Cars)
+        {
+            <div class="entry car-entry-background">
+                <p>@car.Brand @car.Model</p>
+                <div class="entry-buttons">
+                    <button class="btn" data-toggle="modal" data-target="#edit-car-modal" onclick="@(() => SetCarToEdit(car))">Edit car</button>
+                    <button class="btn" onclick="@(() => DeleteCarById(car.CarId))">Delete car</button>
+                </div>
+                <div class="clear-float"></div>
+            </div>
+        }
+    </div>
+}
+
+    <div id="edit-car-modal" class="modal fade" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                @if (CarToEdit != null)
+                {
+                    <div class="modal-header">
+                        <h5 class="modal-title">@CarToEdit.Brand @CarToEdit.Model</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="brand"> Brand: </label>
+                            <input type="text" name="brand" class="form-control format" bind="@CarToEdit.Brand" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="model"> Model: </label>
+                            <input type="text" name="model" class="form-control format" bind="@CarToEdit.Model" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="engine" class="control-label">Engine: </label>
+                            <select class="form-control format" onchange="@OnEngineSelect">
+                                <option value="@CarToEdit.Engine">@CarToEdit.Engine</option>
+                                @foreach (var engineType in Enum.GetValues(typeof(EngineType)))
+                                {
+                                    <option value="@engineType">@engineType</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="year"> Year: </label>
+                            <input type="text" name="year" class="form-control format" bind="@CarToEdit.Year" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="model"> Seat count: </label>
+                            <input type="text" name="model" class="form-control format" bind="@CarToEdit.Seats" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transmission" class="control-label"> Transmission: </label>
+                            <select class="form-control" onchange="@OnTransmissionSelect">
+                                <option value="@CarToEdit.Transmission">@CarToEdit.Transmission.GetName()</option>
+                                @foreach (TransmissionType transmission in Enum.GetValues(typeof(TransmissionType)))
+                                {
+                                    <option value="@transmission">@transmission.GetName()</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price" class="control-label"> Price/day (&euro;): </label>
+                            <input name="price" type="number" class="form-control" bind="@CarToEdit.Price" />
+                        </div>
+
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="ac" bind="@CarToEdit.Ac" checked />
+                            <label class="custom-control-label" for="ac">AC</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn">Cancel</button>
+                        <button type="button" class="btn">Save</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+@functions 
+{
+    [Parameter] IEnumerable<Car> Cars { get; set; }
+    private Car CarToEdit { get; set; }
+
+    private async Task DeleteCarById(int carId)
+    {
+        Cars = Cars.Where(c => c.CarId != carId);
+        await Http.DeleteAsync($"api/Cars/Delete/{carId}");
+        this.StateHasChanged();
+    }
+
+    private void SetCarToEdit(Car car)
+    {
+        CarToEdit = car;
+    }
+
+    private void OnEngineSelect(UIChangeEventArgs engineChangeEvent)
+    {
+        EngineType engine;
+        if (Enum.TryParse<EngineType>(engineChangeEvent.Value.ToString(), out engine))
+            CarToEdit.Engine = engine;
+        else
+            CarToEdit.Engine = default(EngineType);
+    }
+
+    protected void OnTransmissionSelect(UIChangeEventArgs transmissionChangeEvent)
+    {
+        TransmissionType transmission;
+        Enum.TryParse(transmissionChangeEvent.Value.ToString(), out transmission);
+        CarToEdit.Transmission = transmission;
+    }
+}

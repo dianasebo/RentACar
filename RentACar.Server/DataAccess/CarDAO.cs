@@ -50,6 +50,10 @@ namespace RentACar.Server.DataAccess
             });
         }
 
+        public IEnumerable<Car> GetCarsForUser (int userId) {
+            return TryDatabaseQuery(() => db.Cars.Where(c => c.UserId == userId));
+        }
+
         public string GetRandomBrand() 
         {
             return TryDatabaseQuery(() => db.Cars.Select(c => c.Brand)

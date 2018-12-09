@@ -25,6 +25,11 @@
                 <div onclick="@(() => SelectedPage = "account")">Account</div>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="btn" >
+                <div onclick="@(() => SelectedPage = "garage")">Garage</div>
+            </a>
+        </li>
     </ul>
 </div>
 
@@ -51,4 +56,10 @@ else if (SelectedPage.Equals("account"))
     <Account User="@CurrentUser">
 
     </Account>
+}
+else if (SelectedPage.Equals("garage"))
+{
+    <MyGarage User="@CurrentUser">
+
+    </MyGarage>
 }

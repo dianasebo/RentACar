@@ -1,44 +1,57 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using System.Threading.Tasks;
-// using RentACar.Server.DataAccess;
-// using RentACar.Shared.Models;
-// using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using RentACar.Server.DataAccess;
+using RentACar.Shared.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
-// namespace RentACar.Server.Controllers {
-//     public class UserController : Controller {
-//         UserDAO userDAO = new UserDAO ();
+namespace RentACar.Server.Controllers
+{
+    public class UserController : Controller
+    {
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserDAO userDAO = new UserDAO();
 
-//         [HttpGet]
-//         [Route ("api/Users/Index")]
-//         public IEnumerable<User> Index () => userDAO.GetAllUsers ();
+        public UserController (UserManager<IdentityUser> userManager)
+        {
+            this.userManager = userManager;
+        }
 
-//         [HttpPost]
-//         [Route ("api/Users/Create")]
-//         public void Create ([FromBody] User user) {
-//             if (ModelState.IsValid)
-//                 userDAO.AddUser (user);
-//         }
+        [HttpGet]
+        [Route("api/Users/Index")]
+        public IEnumerable<User> Index() => userDAO.GetAllUsers();
 
-//         [HttpGet]
-//         [Route ("api/Users/Details/{id}")]
-//         public User Details (int id) {
+        //[HttpPost]
+        //[Route("api/Users/Create")]
+        //public void Create([FromBody] User user)
+        //{
+        //    if (ModelState.IsValid)
+        //        userDAO.AddUser(user);
+        //}
 
-//             return userDAO.GetUserById (id);
-//         }
+        //[HttpGet]
+        //[Route("api/Users/{id}")]
+        //public User GetUserById(int id)
+        //{
+        //    return userDAO.GetUserById(id);
+        //}
 
-//         [HttpPut]
-//         [Route ("api/Users/Edit")]
-//         public void Edit ([FromBody]User user) {
-//             if (ModelState.IsValid)
-//                 userDAO.UpdateUser (user);
-//         }
+        //[HttpPut]
+        //[Route("api/Users/Edit")]
+        //public void Edit([FromBody]User user)
+        //{
+        //    if (ModelState.IsValid)
+        //        userDAO.UpdateUser(user);
+        //}
 
-//         [HttpDelete]
-//         [Route ("api/Users/Delete/{id}")]
-//         public void Delete (int id) {
-//             userDAO.DeleteById (id);
-//         }
-//     }
-// }
+        [HttpDelete]
+        [Route("api/Users/Delete/{id}")]
+        public async Task Delete(int id)
+        {
+            var email = userDAO.GetUserById(id).Email;
+            var userToDelete = await userManager.FindByEmailAsync(email);
+            userDAO.DeleteById(id);
+            await userManager.DeleteAsync(userToDelete);
+        }
+    }
+}

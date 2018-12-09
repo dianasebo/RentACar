@@ -1,6 +1,5 @@
 @page "/create"
 @using System
-@using System.Text
 @using System.Linq
 @using RentACar.Shared.Models
 @using RentACar.Client.Services
@@ -34,7 +33,7 @@
                 <option value="">- Select Engine -</option>
                 @foreach (var engineType in Enum.GetValues(typeof(EngineType)))
                 {
-                <option value="@engineType">@engineType</option>
+                    <option value="@engineType">@engineType</option>
                 }
             </select>
         </div>
@@ -80,7 +79,7 @@
 
         <div class="form-group">
             <label for="images" class="control-label"> Images (up to 10 pictures, up to 1MB each): </label>
-            <input id="upload" name="images" type="file" class="form-control" onchange="@(async () => await UploadPictures())" multiple accept=".jpg, .jpeg, .png" />
+            <input id="upload" name="images" type="file" class="form-control" onchange="@(async () => await UploadPictures())" multiple accept=".jpg, .jpeg, .png, .webp" />
         </div>
 
         @if (DisplayPopup)
@@ -126,7 +125,7 @@
     protected async Task CreateCar()
     {
         var currentUser = await SessionStorage.GetItem<User>("currentUser");
-        Car.UserID = currentUser.UserId;
+        Car.UserId = currentUser.UserId;
 
         var createCarRequest = new CreateCarRequest
                                 {

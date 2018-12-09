@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RentACar.Shared.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace RentACar.Server.DataAccess 
 {
@@ -12,7 +13,7 @@ namespace RentACar.Server.DataAccess
     {
         public IEnumerable<User> GetAllUsers () 
         {
-            return TryDatabaseQuery(() => db.UserInfo.ToList());
+            return TryDatabaseQuery(() => db.UserInfo.Where(u => !u.IsAdmin));
         }
 
         public void AddUser (User user) 
@@ -38,9 +39,9 @@ namespace RentACar.Server.DataAccess
         public void DeleteById (int id) 
         {
             TryDatabaseQuery(() => {
-                User user = db.UserInfo.Find (id);
-                db.UserInfo.Remove (user);
-                db.SaveChanges ();
+                User user = db.UserInfo.Find(id);
+                db.UserInfo.Remove(user);
+                db.SaveChanges();
             });
         }
     }

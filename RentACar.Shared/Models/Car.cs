@@ -9,7 +9,7 @@ namespace RentACar.Shared.Models
     public class Car
     {
         [Required] [Column("id")] public int CarId { get; set; }
-        [Required] [Column("user_id")] public int UserID { get; set; }
+        [Required] [Column("user_id")] public int UserId { get; set; }
         [Required] [Column("brand")] public string Brand { get; set; }
         [Required] [Column("model")] public string Model { get; set; }
         [Required] [Column("year")] public int Year { get; set; }

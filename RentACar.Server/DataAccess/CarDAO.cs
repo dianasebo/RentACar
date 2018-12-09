@@ -41,6 +41,15 @@ namespace RentACar.Server.DataAccess
             });
         }
 
+        public void DeleteCarById(int carId)
+        {
+            TryDatabaseQuery(() => {
+                Car car = db.Cars.Find(carId);
+                db.Cars.Remove(car);
+                db.SaveChanges();
+            });
+        }
+
         public string GetRandomBrand() 
         {
             return TryDatabaseQuery(() => db.Cars.Select(c => c.Brand)
@@ -86,7 +95,7 @@ namespace RentACar.Server.DataAccess
                                                  .FirstOrDefault());
         }
 
-        public IEnumerable<Car> GetAllCars() => TryDatabaseQuery(() => db.Cars.AsEnumerable());
+        public IEnumerable<Car> GetAllCars() => TryDatabaseQuery(() => db.Cars);
 
         public IEnumerable<string> GetAllBrandsForYear(int year)
         {

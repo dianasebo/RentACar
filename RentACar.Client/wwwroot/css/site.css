@@ -2,7 +2,7 @@
 .sidebar {
     float: left;
     border-top: 1px solid black;
-    background-color: #174241;
+    background: #174241;
     padding-top: 25px;
     width: 250px;
     height: 100vh;
@@ -17,7 +17,7 @@
     background: #2B7A78;
 }
 body {
-    background-color: #17252A;
+    background: #17252A;
     color: #FFFFFF;
     background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
 }
@@ -43,7 +43,7 @@ body {
 .menu-bar {
     width: 100%;
     text-align: right;
-    background-color: #2B7A78;
+    background: #2B7A78;
 }
 
 .clear-float {
@@ -147,7 +147,7 @@ body {
     width: 65%;
     margin: 0 auto 20px auto;
     border: 1px solid #000000;
-    background-color: #2B7A78;
+    background: #2B7A78;
     text-align: justify;
     padding: 20px 0 0 0;
     -webkit-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
@@ -156,7 +156,7 @@ body {
 }
 
     .result p {
-        background-color: #032322;
+        background: #032322;
         font-size: 20px;
         font-weight: 500;
         padding: 0 20px 0 20px;
@@ -168,7 +168,7 @@ body {
     }
 
 .dialog-box {
-    background-color: #11191C;
+    background: #11191C;
     padding: 20px;
     -webkit-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
@@ -220,5 +220,50 @@ body {
 }
 
 #announcement-modal {
+    color: #000000;
+}
+
+.entry {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px 50px;
+    background: #3c1f51;
+    -webkit-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
+}
+
+    .entry p {
+        float: left;
+        margin: 0;
+        padding: 0;
+        line-height: 38px;
+        font-size: 20px;
+    }
+
+.user-entry-background {
+    background: #3c1f51;
+}
+
+.entry-buttons {
+    float: right;
+}
+
+.car-entry-background {
+    background: #b75f01;
+}
+
+.management-section-title {
+    font-family: Kelvinized;
+    margin: 20px 0 10px 10px;
+}
+
+.message-display {
+    width: 50%;
+    margin: 100px auto;
+    text-align: center;
+}
+
+#edit-car-modal {
     color: #000000;
 }

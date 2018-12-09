@@ -1,17 +1,16 @@
-using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentACar.Shared.Models;
-using Microsoft.AspNetCore.Identity;
 
-namespace RentACar.Server.DataAccess 
+namespace RentACar.Server.DataAccess
 {
-    public class RentACarContext : IdentityDbContext 
+    public class RentACarContext : IdentityDbContext
     {
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<CarPicture> CarPictures { get; set; }
         public virtual DbSet<User> UserInfo { get; set; }
-        
+        public virtual DbSet<Message> Messages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -21,13 +20,19 @@ namespace RentACar.Server.DataAccess
             builder.Entity<Car>()
                 .HasMany(c => c.Pictures)
                 .WithOne(p => p.Car);
+            builder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages);
+            builder.Entity<Message>()
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages);
         }
 
-        protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured) 
+            if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql ("server=localhost;database=rent_a_car;user=root;password=root");
+                optionsBuilder.UseMySql("server=localhost;database=rent_a_car;user=root;password=root");
                 optionsBuilder.EnableSensitiveDataLogging();
             }
         }

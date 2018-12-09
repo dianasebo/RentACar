@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentACar.Client;
@@ -37,11 +33,16 @@ namespace RentACar.Server.Controllers
             return new GenericResponse();
         }
 
+        [HttpDelete]
+        [Route("api/Cars/Delete/{carId}")]
+        public void DeleteCarById(int carId)
+        {
+            carDAO.DeleteCarById(carId);
+        }
+
         [HttpGet]
         [Route("api/Cars/Random/{count}")]
         public IEnumerable<Car> GetSomeCars(int count) => carDAO.GetRandomCars(count);
-
-        //---------- functions used for initialization ----------
 
         [HttpGet]
         [Route("api/Cars/{carId}/Pictures")]
@@ -49,7 +50,6 @@ namespace RentACar.Server.Controllers
         {
             return File(carDAO.GetPictureForCar(carId), "image/jpeg");
         }
-
 
         [HttpGet]
         [Route("api/Cars/{carId}/Pictures/{pictureId}")]
@@ -87,8 +87,6 @@ namespace RentACar.Server.Controllers
         [HttpGet]
         [Route("api/Cars/Cities")]
         public IEnumerable<string> GetAllCities() => carDAO.GetAllCities();
-
-
 
         [HttpPost]
         [Route("api/Cars/Search")]

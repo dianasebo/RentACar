@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RentACar.Shared.Models {
+namespace RentACar.Shared.Models
+{
     [Table("users")]
-    public class User {
+    public class User
+    {
         [Required] [Column("id")] public int UserId { get; set; }
         [Required] [Column("email")] public string Email { get; set; }
         [Required] [Column("lastname")] public string Lastname { get; set; }
@@ -14,5 +16,7 @@ namespace RentACar.Shared.Models {
         [Column("city")] public string City { get; set; }
         [Column("address")] public string Address { get; set; }
         public ICollection<Car> Cars { get; set; }
+        public IEnumerable<Message> ReceivedMessages { get; set; }
+        public IEnumerable<Message> SentMessages { get; set; }
     }
 }

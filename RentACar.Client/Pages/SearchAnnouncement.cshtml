@@ -41,15 +41,6 @@
         </div>
 
         <div class="form-group">
-            <label for="from"> From: </label>
-            <input type="date" name="from" class="form-control format" bind="@UserInput.From" format-value="yyyy-MM-dd" value="" />
-
-            <label for="to"> To: </label>
-            <input type="date" name="from" class="form-control format" bind="@UserInput.To" format-value="yyyy-MM-dd" value="" />
-        </div>
-
-
-        <div class="form-group">
             <button type="button" class="btn" onclick="@Search">Search</button>
             <button class="btn" onclick="">Cancel</button>
         </div>
@@ -59,8 +50,6 @@
     <div class="clear-float"></div>
 
 </div>
-
-<button onclick="@ToggleFilters" id="toggle" type="button" class="btn btn-lg btn-block">Filter search</button>
 
 <div class="results">
 
@@ -142,11 +131,6 @@
         ListOfResultedCars = await Http.GetJsonAsync<IEnumerable<Car>>("api/Cars/Random/5");
     }
 
-    protected async void ToggleFilters()
-    {
-        await JsInterop.ToggleFilters();
-    }
-
     protected void OnEngineSelect(UIChangeEventArgs engineChangeEvent)
     {
         EngineType engine;
@@ -158,7 +142,6 @@
 
     protected async void Search()
     {
-
         try
         {
             ListOfResultedCars = await Http.PostJsonAsync<IEnumerable<Car>>("api/Cars/Search", UserInput);

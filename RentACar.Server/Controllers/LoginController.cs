@@ -34,7 +34,6 @@ namespace RentACar.Server.Controllers
                 UserName = registrationRequest.Email,
                 Email = registrationRequest.Email
             }, registrationRequest.Password);
-
             if (result.Succeeded)
                 userDAO.AddUser(registrationRequest.CreateUser());
 

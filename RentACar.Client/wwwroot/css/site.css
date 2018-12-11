@@ -22,17 +22,39 @@ body {
     background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
 }
 
+app {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 20% auto 40px;
+    grid-template-areas: "header" "content" "footer";
+}
+
 .header {
-    display: block;
-    width: 100%;
+    grid-area: header;
+    display: grid;
+    grid-template-rows: auto 31px;
+    grid-template-areas: "logo" "menu-bar";
+}
+
+.content {
+    grid-area: content;
+}
+
+.footer {
+    grid-area: footer;
+    height: 100%;
+    background: #2B7A78;
+    text-align: center;
+    line-height: 40px;
 }
 
 .logo {
-    width: 10%;
+    grid-area: logo;
     font-family: 'Kelvinized';
     font-size: 35px;
     color: #FFFFFF;
     margin: 20px;
+    align-self: center;
 }
 
     .logo a {
@@ -41,6 +63,7 @@ body {
     }
 
 .menu-bar {
+    grid-area: menu-bar;
     width: 100%;
     text-align: right;
     background: #2B7A78;
@@ -86,10 +109,6 @@ body {
         transition: all 0.3s ease-in-out;
     }
 
-.main {
-    width: 100%;
-}
-
 .selected {
     text-shadow: 0 0 0;
 }
@@ -110,20 +129,31 @@ body {
 .search-page-background {
     background-size: cover;
     background-image: url("../images/search-bg.jpg");
+    -webkit-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 20px 3px rgba(0,0,0,0.75);
 }
 
 .create-page-background {
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
     background-size: cover;
     background-image: url("../images/create-bg.jpg");
 }
 
 .login-page-background {
-    background-size: cover;
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
     background-image: url("../images/login-bg.jpg");
     padding: 20px;
 }
 
 .register-background {
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
     background-size: cover;
     background-image: url("../images/register-bg.jpg");
     padding: 20px;
@@ -132,10 +162,6 @@ body {
 .centered-content {
     width: 40%;
     margin: auto;
-}
-
-#filters {
-    display: none;
 }
 
 .results {
@@ -264,6 +290,6 @@ body {
     text-align: center;
 }
 
-#edit-car-modal {
+.modal {
     color: #000000;
 }

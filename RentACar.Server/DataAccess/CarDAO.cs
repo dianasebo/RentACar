@@ -41,6 +41,14 @@ namespace RentACar.Server.DataAccess
             });
         }
 
+        public void UpdateCar(Car updatedCar)
+        {
+            TryDatabaseQuery(() => {
+                db.Entry(updatedCar).State = EntityState.Modified;
+                db.SaveChanges();
+            });
+        }
+
         public void DeleteCarById(int carId)
         {
             TryDatabaseQuery(() => {

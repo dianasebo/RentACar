@@ -38,13 +38,18 @@ namespace RentACar.Server.Controllers
         //    return userDAO.GetUserById(id);
         //}
 
-        //[HttpPut]
-        //[Route("api/Users/Edit")]
-        //public void Edit([FromBody]User user)
-        //{
-        //    if (ModelState.IsValid)
-        //        userDAO.UpdateUser(user);
-        //}
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("api/Users/Edit")]
+        public async Task Edit([FromBody]User updatedUser)
+        {
+            string oldUserEmail = userDAO.GetUserById(updatedUser.UserId).Email;
+            if (ModelState.IsValid)
+                userDAO.UpdateUser(updatedUser);
+            IdentityUser userToEdit = await userManager.FindByEmailAsync(oldUserEmail);
+            await userManager.SetEmailAsync(userToEdit, updatedUser.Email);
+
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete]

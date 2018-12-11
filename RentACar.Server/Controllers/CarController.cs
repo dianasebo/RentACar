@@ -33,6 +33,13 @@ namespace RentACar.Server.Controllers
             return new GenericResponse();
         }
 
+        [HttpPut]
+        [Route ("api/Cars/Update")]
+        public void UpdateCar ([FromBody]Car updatedCar)
+        {
+            carDAO.UpdateCar(updatedCar);
+        }
+
         [Authorize]
         [HttpDelete]
         [Route("api/Cars/Delete/{carId}")]

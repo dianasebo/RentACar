@@ -98,7 +98,6 @@
 
         <div class="form-group">
             <button type="submit" class="btn" onclick="@(async () => await CreateCar())">Save</button>
-            <button class="btn" onclick="@Cancel">Cancel</button>
         </div>
 
     </div>
@@ -164,10 +163,5 @@
         TransmissionType transmission;
         Enum.TryParse(transmissionChangeEvent.Value.ToString(), out transmission);
         Car.Transmission = transmission;
-    }
-
-    protected void Cancel()
-    {
-        UriHelper.NavigateTo("/index");
     }
 }

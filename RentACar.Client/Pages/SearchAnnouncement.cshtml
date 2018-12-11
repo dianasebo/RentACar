@@ -110,7 +110,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn">Contact owner</button>
+                <button type="button" class="btn" onclick="@(() => ContactOwner())">Contact owner</button>
             </div>
         }
 
@@ -152,6 +152,15 @@
             UriHelper.NavigateTo("/login");
         }
         this.StateHasChanged();
+    }
+
+    protected async Task ContactOwner() 
+    {
+        var currentUser = await SessionStorage.GetItem<string>("currentUser");
+        if (currentUser != null)
+            UriHelper.NavigateTo($"/inbox/new/{SelectedCar.UserId}");
+        else
+            UriHelper.NavigateTo("/login");
     }
 
     private void SetSelectedCar(Car selectedCar)

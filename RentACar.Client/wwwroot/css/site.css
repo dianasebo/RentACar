@@ -113,6 +113,32 @@ app {
     text-shadow: 0 0 0;
 }
 
+.inbox {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 30% auto;
+    grid-template-areas: 
+        "threads thread"
+}
+
+.conversations {
+    grid-area: threads;
+    background: #174241;
+    text-align: center;
+}
+
+.conversations-item {
+    background: #ffffff;
+    margin: 3%;
+    color: #000000;
+}
+
+.conversation {
+    grid-area: thread;
+    padding: 10px;
+    text-align: center;
+}
+
 .container {
     padding-top: 5%;
     width: 100%;

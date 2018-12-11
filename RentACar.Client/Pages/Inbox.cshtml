@@ -1,2 +1,54 @@
 ﻿@page "/inbox"
+@page "/inbox/new/{OtherUserId:int}"
+@inherits InboxBase
+@using RentACar.Shared.Models
 
+<div class="inbox">
+    <div class="conversations">
+        <p>Here are your most recent conversations!</p>
+        @if (Conversations != null)
+        {
+            @foreach (var otherUser in Conversations.Keys)
+            {
+                <button onclick="@(() => SelectedConversation = Conversations[otherUser])" class="conversations-item">
+                    @otherUser.Email
+                </button>
+            }
+        }
+    </div>
+    @if (OtherUser != null) 
+    {
+        <div class="new-message">
+                <div class="form-group">
+                    <label for="brand"> You are writing a message to: </label>
+                    <input type="text" name="brand" class="form-control format" bind="@OtherUser.Email"/>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Message text:</label>
+                    <textarea class="form-control" rows="5" id="comment" bind="@MessageText"></textarea>
+                </div>
+                <div class="form-group">
+                    <button onclick="@(async () => await SendMessage())">Send Message</button>
+                </div>
+        </div>
+    } 
+    else if (SelectedConversation != null)
+    {
+        <div class="conversation">
+            @foreach (var message in SelectedConversation)
+            {
+                <div style="width: 100%; float: @GetFloatValue(message)">
+                    @if (message.SenderId == CurrentUser.UserId)
+                    {
+                        <p>Message: @message.Text sent to @message.Receiver.Email on @message.Timestamp</p>
+                    }
+                    else
+                    {
+                        <p>Message: @message.Text from @message.Sender.Email on @message.Timestamp</p>
+                    }
+                </div>
+                <div class="clear-float"></div>
+            }
+        </div>
+    }
+</div>

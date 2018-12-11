@@ -31,12 +31,12 @@ namespace RentACar.Server.Controllers
         //        userDAO.AddUser(user);
         //}
 
-        //[HttpGet]
-        //[Route("api/Users/{id}")]
-        //public User GetUserById(int id)
-        //{
-        //    return userDAO.GetUserById(id);
-        //}
+        [HttpGet]
+        [Route("api/Users/{id}")]
+        public User GetUserById(int id)
+        {
+           return userDAO.GetUserById(id);
+        }
 
         //[HttpPut]
         //[Route("api/Users/Edit")]

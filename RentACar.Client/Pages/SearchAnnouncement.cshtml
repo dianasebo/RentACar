@@ -110,7 +110,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn" onclick="@(() => ContactOwner())">Contact owner</button>
+                <button type="button" class="btn" onclick="@(async () => await ContactOwner())">Contact owner</button>
             </div>
         }
 

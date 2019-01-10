@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace RentACar.Shared.Models
 {
@@ -16,7 +18,14 @@ namespace RentACar.Shared.Models
         [Column("city")] public string City { get; set; }
         [Column("address")] public string Address { get; set; }
         public ICollection<Car> Cars { get; set; }
+
+        [JsonIgnore]
         public IEnumerable<Message> ReceivedMessages { get; set; }
+        [JsonIgnore]
         public IEnumerable<Message> SentMessages { get; set; }
+
+        public override bool Equals(object obj) => obj is User && UserId.Equals(((User) obj).UserId);
+        
+        public override int GetHashCode() => UserId.GetHashCode();
     }
 }

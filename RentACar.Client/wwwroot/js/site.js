@@ -37,3 +37,9 @@ function toggleFilters() {
         filters.style.display = "none";
     }
 }
+
+function toggleCarousel() {
+    $('.carousel').carousel({
+        interval: 2000
+    })
+}

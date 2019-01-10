@@ -20,6 +20,10 @@ namespace RentACar.Client.Services
             await JSRuntime.Current.InvokeAsync<Task>("toggleFilters");
         }        
         
+        public static async Task ToggleCarousel()
+        {
+            await JSRuntime.Current.InvokeAsync<Task>("toggleCarousel");
+        }
         private class StringHolder
         {
             public string Content { get; set; }

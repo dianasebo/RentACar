@@ -19,6 +19,10 @@ namespace RentACar.Client.Services
         {
             await JSRuntime.Current.InvokeAsync<Task>("toggleFilters");
         }        
+
+        public static async Task ToggleModal(string modalId) {
+            await JSRuntime.Current.InvokeAsync<Task>("toggleModal", modalId);
+        }
         
         private class StringHolder
         {

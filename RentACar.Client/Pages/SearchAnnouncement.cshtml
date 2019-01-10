@@ -156,7 +156,8 @@
 
     protected async Task ContactOwner() 
     {
-        var currentUser = await SessionStorage.GetItem<string>("currentUser");
+        var currentUser = await SessionStorage.GetItem<User>("currentUser");
+        await JsInterop.ToggleModal("announcement-modal");
         if (currentUser != null)
             UriHelper.NavigateTo($"/inbox/new/{SelectedCar.UserId}");
         else

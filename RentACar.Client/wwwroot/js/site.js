@@ -37,3 +37,7 @@ function toggleFilters() {
         filters.style.display = "none";
     }
 }
+
+function toggleModal(modalId) {
+    $('#' + modalId).modal('toggle');
+}

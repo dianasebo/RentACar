@@ -41,3 +41,9 @@ function toggleFilters() {
 function toggleModal(modalId) {
     $('#' + modalId).modal('toggle');
 }
+
+function toggleCarousel() {
+    $('.carousel').carousel({
+        interval: 2000
+    })
+}
